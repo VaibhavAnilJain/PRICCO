@@ -1,0 +1,264 @@
+body {
+    background-color: #35363a;
+    font-family: Cambria;
+}
+
+.Reg_BgImg {
+    background-image: url("/static/Images/Mix_bg2.png");
+    background-position: center;
+    background-size: cover;
+}
+
+.Log_BgImg {
+    background-image: url("/static/Images/Mix_bg.png");
+    background-position: center;
+    background-size: cover;
+}
+
+.Accessories_BgImg {
+    background-image: url("/static/Images/Ebg_g40.png");
+    background-position: center;
+    background-size: cover;
+}
+
+
+.Groceries_BgImg {
+    background: white;
+    background-image: url("/static/Images/Gbg_g35.png");
+    background-position: center;
+    background-size: cover;
+}
+
+.home_lnkhov, .ProductPrice_lnkhov, .Accessories_lnkhov, .AccessoriesOutputs_lnkhov, .Profile_lnkhov, .Groceries_lnkhov, .GroceriesOutputs_lnkhov, .ProductSpecification_lnkhov, .About_lnkhov, .login_lnkhov, .Amazon_lnkhov, .Flipkart_lnkhov, .Reliance_lnkhov, .JioMart_lnkhov, .Grofers_lnkhov {
+    color: white;
+}
+.home_lnkhov:hover, .login_lnkhov:hover {
+    color: #e7d84b;
+}
+
+.ProductPrice_lnkhov:hover {
+    color: #1b8798;
+}
+
+.Accessories_lnkhov:hover {
+    color: #EC7063;
+}
+
+.AccessoriesOutputs_lnkhov:hover, .Profile_lnkhov:hover {
+    color: #d61c59;
+}
+
+.Groceries_lnkhov:hover {
+    color: #D2B4DE;
+}
+
+.GroceriesOutputs_lnkhov:hover {
+    color: #F08080;
+}
+
+.ProductSpecification_lnkhov:hover {
+    color: #1b8798;
+}
+
+.About_lnkhov:hover {
+    color: #27AE60;
+}
+
+.Amazon_lnkhov:hover, .Flipkart_lnkhov:hover, .Reliance_lnkhov:hover {
+    color: #58D68D;
+    text-decoration: none;
+}
+
+.JioMart_lnkhov:hover, .Grofers_lnkhov:hover {
+    color: #e7d84b;
+    text-decoration: none;
+}
+
+.ImgSize {
+    width: 250px;
+    height: 200px;
+    margin: 5px;
+}
+
+.ContentCenter {
+    padding-top: 14%;
+}
+
+.ProfileContentCenter {
+    padding-top: 75px;
+}
+
+.AccessoriesContentCenter, .GroceriesContentCenter {
+    padding-top: 18%;
+}
+
+.AccessoriesOutputsContentCenter, .GroceriesOutputsContentCenter {
+    padding-top: 130px;
+}
+
+svg {
+    font: 10em/1 Algerian;
+}
+.svg_height {
+    padding-top: 75px;
+}
+.webcoderskull-1 {
+    fill: none;
+    stroke: white;
+    stroke-dasharray: 7% 28%;
+    stroke-width: 3px;
+    -webkit-animation: stroke-offset 6s infinite linear;
+    animation: stroke-offset 6s infinite linear;
+}
+.webcoderskull-1:nth-child(1) {
+    stroke: #360745;
+    stroke-dashoffset: 7%;
+}
+.webcoderskull-1:nth-child(2) {
+    stroke: #d61c59;
+    stroke-dashoffset: 14%;
+}
+.webcoderskull-1:nth-child(3) {
+    stroke: #e7d84b;
+            stroke-dashoffset: 21%;
+}
+.webcoderskull-1:nth-child(4) {
+    stroke: #efeac5;
+    stroke-dashoffset: 28%;
+}
+.webcoderskull-1:nth-child(5) {
+    stroke: #1b8798;
+    stroke-dashoffset: 35%;
+}
+@-webkit-keyframes stroke-offset {
+    50% {
+        stroke-dashoffset: 35%;
+        stroke-dasharray: 0 10%;
+    }
+}
+@keyframes stroke-offset {
+    50% {
+        stroke-dashoffset: 35%;
+        stroke-dasharray: 0 10%;
+    }
+}
+
+.tool .tooltext {
+    visibility: hidden;
+    width: 250%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 80%;
+    margin-left: -200px;
+}
+.tool .tooltext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+.tool:hover .tooltext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.AccessoriesOutputsTool .AccessoriesOutputsToolText {
+    visibility: hidden;
+    width: 10%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 102%;
+    margin-left: -665px;
+}
+.AccessoriesOutputsTool .AccessoriesOutputsToolText::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+.AccessoriesOutputsTool:hover .AccessoriesOutputsToolText {
+    visibility: visible;
+    opacity: 1;
+}
+
+.GroceriesOutputsTool .GroceriesOutputsToolText {
+    visibility: hidden;
+    width: 10%;
+    background-color: rgba(34 ,153, 84, 0.8);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 102%;
+    margin-left: -665px;
+}
+.GroceriesOutputsTool .GroceriesOutputsToolText::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(34 ,153, 84, 0.8) transparent transparent transparent;
+}
+.GroceriesOutputsTool:hover .GroceriesOutputsToolText {
+    visibility: visible;
+    opacity: 1;
+}
+
+.rainbow {
+    text-shadow: 2px 2px 4px #7B7D7D;
+    -webkit-animation: rainbow 5s ease-in-out infinite;
+}
+@-webkit-keyframes rainbow {
+    0%{color: #360745;}
+    25%{color: #d61c59;}
+    50%{color: #e7d84b;}
+    75%{color: #efeac5;}
+    100%{color: #1b8798;}
+}
+
+.GroRainbow {
+    text-shadow: 2px 2px 4px #7B7D7D;
+    -webkit-animation: Grorainbow 5s ease-in-out infinite;
+}
+@-webkit-keyframes Grorainbow {
+    0%{color: #e7d84b;}
+    25%{color: #D2B4DE;}
+    50%{color: #FADBD8;}
+    75%{color: #efeac5;}
+    100%{color: #E59866;}
+}
+
+#NewPasswordPhoneShowHide {
+    display: none;
+}
+
+#AmazonCarouselControl, #FlipkartCarouselControl, #RelDigiCarouselControl {
+    background-color: rgba(21, 67, 96, 0.8);
+}
+
+#JoiMartCarouselControl, #GrofersCarouselControl {
+    background-color: rgba(34 ,153, 84, 0.8);
+}

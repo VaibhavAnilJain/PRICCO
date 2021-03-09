@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+{#    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>#}
+{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>#}
+
+{#    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>#}
+{#    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>#}
+{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>#}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSSPage/StyleSheet.css') }}">
+    <script type="application/javascript" src="{{ url_for('static', filename='JSPage/JavaScript.js') }}"></script>
+
+    <title>Groceries Page</title>
+</head>
+<body class="d-flex h-100 text-center text-success user-select-none Groceries_BgImg">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <div class="px-5 pt-3 pb-3 fixed-top navbar-light shadow rounded">
+            <h3 class="float-left mb-0 p-1 btn-success rounded GroRainbow">PRICCO</h3>
+            <nav class="nav nav-masthead justify-content-center btn-group btn-group-toggle float-right ">
+                <a class="nav-link btn btn-success Groceries_lnkhov" href="ProductPrice">Back</a>
+
+                {% if session.LoggedIn %}
+                    <div class="btn-group" role="group">
+                        <button class="nav-link btn btn-success dropdown-toggle Groceries_lnkhov" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
+                        <div class="dropdown-menu bg-success">
+                            <button class="dropdown-item bg-success disabled" style="color: #D2B4DE">Welcome {{ session.Fname }}</button>
+                            <a class="dropdown-item bg-success Groceries_lnkhov" href="">Favourites</a>
+                            <a class="dropdown-item bg-success Groceries_lnkhov" href="Profile">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item bg-success Groceries_lnkhov" href="{{ url_for('Logout') }}">Logout</a>
+                        </div>
+                    </div>
+                    <a class="nav-link btn btn-success Groceries_lnkhov" href="About">About</a>
+                {% else %}
+                    <a class="nav-link btn btn-success Groceries_lnkhov" href="Login">Sign In</a>
+                    <a class="nav-link btn btn-success Groceries_lnkhov" href="Register">Sign Up</a>
+                {% endif %}
+
+            </nav>
+        </div>
+
+        <main class="GroceriesContentCenter">
+            <h1>Welcome!! Please Enter Name of the Product... (●'◡'●)</h1><br><br>
+            <form action="/GroceriesSearch" method="post">
+                <h3><input type="text" name="Search" class="col-md-3 rounded text-success border-success" data-toggle="tooltip" title="Please Enter Product Name" placeholder="Product Name" required></h3>
+                <input type="submit" class="btn btn-lg btn-success font-weight-bold" value="Search">
+            </form>
+        </main>
+    </div>
+</body>
+</html>
