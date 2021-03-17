@@ -269,8 +269,8 @@ def AccessoriesSearch():
             RelianceVal = (Reliance[0])
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(RelianceSource)
 
@@ -283,7 +283,7 @@ def AccessoriesSearch():
                 string = i.text
                 RelName.append(string.strip())
 
-            for i in RelianceSoup.find_all('span', class_="sc-bxivhb cHwYJ"):
+            for i in RelianceSoup.find_all('span', class_="sc-bxivhb dmBTBc"):
                 string = i.text
                 RelPrice.append(string.strip())
 
@@ -318,7 +318,7 @@ def AccessoriesSearch():
         FlipkartDetails = Flipkart()
         RelianceDetails = RelianceDigi()
 
-        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
+        return render_template('AccessoriesOutputs.html',AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
 
     return render_template('Accessories.html')
 
@@ -356,8 +356,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(JioMartSource)
 
@@ -412,8 +412,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
             Driver.get(GrofersSource)
 
