@@ -20,6 +20,35 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gec
            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT": "1",
            "Connection": "close", "Upgrade-Insecure-Requests": "1"}
 
+
+def bubbleSort(a, b, c, d):
+    n = len(a)
+
+
+    for i in range(n - 1):
+
+        for j in range(0, n - i - 1):
+
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                b[j], b[j + 1] = b[j + 1], b[j]
+                c[j], c[j + 1] = c[j + 1], c[j]
+                d[j], d[j + 1] = d[j + 1], d[j]
+
+
+def bubbleSortsecond(a, b, c):
+    n = len(a)
+
+    for i in range(n - 1):
+
+        for j in range(0, n - i - 1):
+
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                b[j], b[j + 1] = b[j + 1], b[j]
+                c[j], c[j + 1] = c[j + 1], c[j]
+
+
 @web.route('/')
 def Home():
     if 'LoggedIn' in session:
@@ -205,6 +234,8 @@ def AccessoriesSearch():
                 else:
                     pass
 
+            bubbleSort(AmzPrc,AmzImg,AmzLink,AmzNamFet)
+
             for AmazonImg, AmazonLink, AmazonName, AmazonPrice in zip(AmzImg, AmzLink, AmzNamFet, AmzPrc):
                 AmazonDetails.append(AmazonImg)
                 AmazonDetails.append(AmazonLink)
@@ -235,7 +266,8 @@ def AccessoriesSearch():
 
             for i in FlipkartSoup.find_all('div', class_="_30jeq3 _1_WHN1"):
                 string = i.text
-                FlipkartPrice.append(string.strip())
+                fs = string.strip()
+                FlipkartPrice.append(fs[1:])
 
             Links = FlipkartSoup.find_all("a", attrs={'class': '_1fQZEK'})
             for Link in Links:
@@ -243,10 +275,13 @@ def AccessoriesSearch():
             for EachLink in FlipkartLinks:
                 FlkLink.append(FlipkartLink + EachLink)
 
+            bubbleSortsecond(FlipkartPrice, FlipkartName, FlkLink)
+
             for FlipkartLink, FlipkartName, FlipkartPrice in zip(FlkLink, FlipkartName, FlipkartPrice):
                 FlipkartDetails.append(FlipkartLink)
                 FlipkartDetails.append(FlipkartName)
                 FlipkartDetails.append(FlipkartPrice)
+
 
             return FlipkartDetails
 
@@ -285,7 +320,8 @@ def AccessoriesSearch():
 
             for i in RelianceSoup.find_all('span', class_="sc-bxivhb dmBTBc"):
                 string = i.text
-                RelPrice.append(string.strip())
+                rs = string.strip()
+                RelPrice.append(rs[1:])
 
             Link = RelianceSoup.find_all('a')
             for i in Link:
@@ -305,6 +341,9 @@ def AccessoriesSearch():
                     RelImg.append(RelianceLink + i)
                 else:
                     pass
+
+            bubbleSort(RelPrice, RelName, RelLink, RelImg)
+
 
             for RelianceImg, RelianceLink, RelianceName, ReliancePrice in zip(RelImg, RelLink, RelName, RelPrice):
                 RelianceDetails.append(RelianceImg)
@@ -372,7 +411,8 @@ def GroceriesSearch():
 
             for i in JioMartSoup.find_all('span', attrs={'id':'final_price'}):
                 string = i.text
-                JioMartPrice.append(string.strip())
+                js = string.strip()
+                JioMartPrice.append(js[1:])
 
             Link = JioMartSoup.find_all('a', class_="category_name")
             for i in Link:
@@ -383,6 +423,8 @@ def GroceriesSearch():
             JMImg = JioMartSoup.find_all('img', class_="product-image-photo")
             for i in JMImg:
                 JioMartImg.append(i.get('src'))
+
+            bubbleSort(JioMartPrice,JioMartName,JioMartImg,JMLink)
 
             for JioMartImg, JioMartLink, JioMartName,JioMartPrice in zip(JioMartImg, JMLink, JioMartName, JioMartPrice):
                 JioMartDetails.append(JioMartImg)
@@ -433,7 +475,8 @@ def GroceriesSearch():
 
             for i in GrofersSoup.find_all('span', class_="plp-product__price--new"):
                 string = i.text
-                GroPrice.append(string.strip())
+                gs = string.strip()
+                GroPrice.append(gs[1:])
 
             Link = GrofersSoup.find_all('a', class_="product__wrapper")
             for i in Link:
@@ -444,6 +487,8 @@ def GroceriesSearch():
             Img = GrofersSoup.find_all('img', class_="img-loader__img img-loader__img--shown img-loader__img--plp")
             for i in Img:
                 GroImg.append(Grofershttp + i.get('src'))
+
+            bubbleSort(GroPrice,GroImg,GroName,GroLink)
 
             for GrofersImg, GrofersLink, GrofersName, GrofersPrice in zip(GroImg, GroLink, GroName, GroPrice):
                 GrofersDetails.append(GrofersImg)
