@@ -207,7 +207,10 @@ def AccessoriesSearch():
 
             for i in AmazonSoup.find_all('span', class_="a-price-whole"):
                 string = i.text
-                AmzPrc.append(string.strip())
+                aas = string.strip()
+                asss = aas.replace(',', '')
+                assss = asss.replace('.', '')
+                AmzPrc.append(assss)
 
             for each in AmzNam:
                 if each.find("(Renewed)") != -1:
@@ -267,7 +270,9 @@ def AccessoriesSearch():
             for i in FlipkartSoup.find_all('div', class_="_30jeq3 _1_WHN1"):
                 string = i.text
                 fs = string.strip()
-                FlipkartPrice.append(fs[1:])
+                fss = fs[1:]
+                fsss = fss.replace(',','')
+                FlipkartPrice.append(fsss)
 
             Links = FlipkartSoup.find_all("a", attrs={'class': '_1fQZEK'})
             for Link in Links:
@@ -321,8 +326,9 @@ def AccessoriesSearch():
             for i in RelianceSoup.find_all('span', class_="sc-bxivhb dmBTBc"):
                 string = i.text
                 rs = string.strip()
-                RelPrice.append(rs[1:])
-
+                rss = rs[1:]
+                rsss = rss.replace(',','')
+                RelPrice.append(rsss)
             Link = RelianceSoup.find_all('a')
             for i in Link:
                 Links.append(i.get('href'))
@@ -409,10 +415,15 @@ def GroceriesSearch():
                 string = i.text
                 JioMartName.append(string.strip())
 
+            jprice = []
             for i in JioMartSoup.find_all('span', attrs={'id':'final_price'}):
                 string = i.text
                 js = string.strip()
-                JioMartPrice.append(js[1:])
+                jss = js[1:]
+                jsss = jss.replace(',', '')
+                jprice.append(jsss)
+
+            JioMartPrice = [float(i) for i in jprice]
 
             Link = JioMartSoup.find_all('a', class_="category_name")
             for i in Link:
@@ -473,11 +484,15 @@ def GroceriesSearch():
             for i, j in zip(GName, GNames):
                 GroName.append(i + " | " + j)
 
+            gprice = []
             for i in GrofersSoup.find_all('span', class_="plp-product__price--new"):
                 string = i.text
                 gs = string.strip()
-                GroPrice.append(gs[1:])
+                gss = gs[1:]
+                gsss = gss.replace(',', '')
+                gprice.append(gsss)
 
+            GroPrice = [float(i) for i in gprice]
             Link = GrofersSoup.find_all('a', class_="product__wrapper")
             for i in Link:
                 Links.append(i.get('href'))
@@ -487,6 +502,8 @@ def GroceriesSearch():
             Img = GrofersSoup.find_all('img', class_="img-loader__img img-loader__img--shown img-loader__img--plp")
             for i in Img:
                 GroImg.append(Grofershttp + i.get('src'))
+            print(GroLink)
+            print(GroName)
 
             bubbleSort(GroPrice,GroImg,GroName,GroLink)
 
@@ -495,6 +512,7 @@ def GroceriesSearch():
                 GrofersDetails.append(GrofersLink)
                 GrofersDetails.append(GrofersName)
                 GrofersDetails.append(GrofersPrice)
+            print(GrofersDetails)
 
             return GrofersDetails
 
