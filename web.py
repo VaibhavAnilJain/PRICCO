@@ -20,34 +20,24 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gec
            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT": "1",
            "Connection": "close", "Upgrade-Insecure-Requests": "1"}
 
-
 def bubbleSort(a, b, c, d):
     n = len(a)
-
-
     for i in range(n - 1):
-
         for j in range(0, n - i - 1):
-
             if a[j] > a[j + 1]:
                 a[j], a[j + 1] = a[j + 1], a[j]
                 b[j], b[j + 1] = b[j + 1], b[j]
                 c[j], c[j + 1] = c[j + 1], c[j]
                 d[j], d[j + 1] = d[j + 1], d[j]
 
-
 def bubbleSortsecond(a, b, c):
     n = len(a)
-
     for i in range(n - 1):
-
         for j in range(0, n - i - 1):
-
             if a[j] > a[j + 1]:
                 a[j], a[j + 1] = a[j + 1], a[j]
                 b[j], b[j + 1] = b[j + 1], b[j]
                 c[j], c[j + 1] = c[j + 1], c[j]
-
 
 @web.route('/')
 def Home():
@@ -182,6 +172,7 @@ def AccessoriesSearch():
             Amazon = []
             AmzNam = []
             AmzPrc = []
+            APrice = []
             AmzNamFet = []
             AmzLinks = []
             AmzLink = []
@@ -207,14 +198,15 @@ def AccessoriesSearch():
 
             for i in AmazonSoup.find_all('span', class_="a-price-whole"):
                 string = i.text
-                aas = string.strip()
-                asss = aas.replace(',', '')
-                assss = asss.replace('.', '')
-                AmzPrc.append(assss)
+                AmzPri = string.strip()
+                AmzPriSrt = AmzPri.replace(',', '')
+                PriSort = AmzPriSrt.replace('.', '')
+                APrice.append(PriSort)
+            AmzPrc = [float(i) for i in APrice]
 
             for each in AmzNam:
                 if each.find("(Renewed)") != -1:
-                    Fetch =each[10:]
+                    Fetch = each[10:]
                     head, sep, tail = Fetch.partition(')')
                     Fetch = ("(Renewed) " + head + sep)
                     AmzNamFet.append(Fetch)
@@ -237,7 +229,7 @@ def AccessoriesSearch():
                 else:
                     pass
 
-            bubbleSort(AmzPrc,AmzImg,AmzLink,AmzNamFet)
+            bubbleSort(AmzPrc, AmzImg, AmzLink, AmzNamFet)
 
             for AmazonImg, AmazonLink, AmazonName, AmazonPrice in zip(AmzImg, AmzLink, AmzNamFet, AmzPrc):
                 AmazonDetails.append(AmazonImg)
@@ -269,10 +261,10 @@ def AccessoriesSearch():
 
             for i in FlipkartSoup.find_all('div', class_="_30jeq3 _1_WHN1"):
                 string = i.text
-                fs = string.strip()
-                fss = fs[1:]
-                fsss = fss.replace(',','')
-                FlipkartPrice.append(fsss)
+                FlkPri = string.strip()
+                FlkPriSrt = FlkPri[1:]
+                PriSort = FlkPriSrt.replace(',', '')
+                FlipkartPrice.append(PriSort)
 
             Links = FlipkartSoup.find_all("a", attrs={'class': '_1fQZEK'})
             for Link in Links:
@@ -287,12 +279,12 @@ def AccessoriesSearch():
                 FlipkartDetails.append(FlipkartName)
                 FlipkartDetails.append(FlipkartPrice)
 
-
             return FlipkartDetails
 
         def RelianceDigi():
             RelName = []
             RelPrice = []
+            RPrice = []
             Links = []
             RelLink = []
             Imgs = []
@@ -309,8 +301,8 @@ def AccessoriesSearch():
             RelianceVal = (Reliance[0])
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(RelianceSource)
 
@@ -325,10 +317,12 @@ def AccessoriesSearch():
 
             for i in RelianceSoup.find_all('span', class_="sc-bxivhb dmBTBc"):
                 string = i.text
-                rs = string.strip()
-                rss = rs[1:]
-                rsss = rss.replace(',','')
-                RelPrice.append(rsss)
+                RelPri = string.strip()
+                RelPriSrt = RelPri[1:]
+                PriceSort = RelPriSrt.replace(',', '')
+                RPrice.append(PriceSort)
+            RelPrice = [float(i) for i in RPrice]
+
             Link = RelianceSoup.find_all('a')
             for i in Link:
                 Links.append(i.get('href'))
@@ -350,7 +344,6 @@ def AccessoriesSearch():
 
             bubbleSort(RelPrice, RelName, RelLink, RelImg)
 
-
             for RelianceImg, RelianceLink, RelianceName, ReliancePrice in zip(RelImg, RelLink, RelName, RelPrice):
                 RelianceDetails.append(RelianceImg)
                 RelianceDetails.append(RelianceLink)
@@ -363,7 +356,7 @@ def AccessoriesSearch():
         FlipkartDetails = Flipkart()
         RelianceDetails = RelianceDigi()
 
-        return render_template('AccessoriesOutputs.html',AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
+        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
 
     return render_template('Accessories.html')
 
@@ -387,6 +380,7 @@ def GroceriesSearch():
         def JioMart():
             JioMartName = []
             JioMartPrice = []
+            JPrice = []
             Links = []
             JMLink = []
             JioMartImg = []
@@ -401,8 +395,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(JioMartSource)
 
@@ -415,15 +409,13 @@ def GroceriesSearch():
                 string = i.text
                 JioMartName.append(string.strip())
 
-            jprice = []
-            for i in JioMartSoup.find_all('span', attrs={'id':'final_price'}):
+            for i in JioMartSoup.find_all('span', attrs={'id': 'final_price'}):
                 string = i.text
-                js = string.strip()
-                jss = js[1:]
-                jsss = jss.replace(',', '')
-                jprice.append(jsss)
-
-            JioMartPrice = [float(i) for i in jprice]
+                JmtPri = string.strip()
+                JmtPriSrt = JmtPri[1:]
+                PriSort = JmtPriSrt.replace(',', '')
+                JPrice.append(PriSort)
+            JioMartPrice = [float(i) for i in JPrice]
 
             Link = JioMartSoup.find_all('a', class_="category_name")
             for i in Link:
@@ -435,7 +427,7 @@ def GroceriesSearch():
             for i in JMImg:
                 JioMartImg.append(i.get('src'))
 
-            bubbleSort(JioMartPrice,JioMartName,JioMartImg,JMLink)
+            bubbleSort(JioMartPrice, JioMartName, JioMartImg, JMLink)
 
             for JioMartImg, JioMartLink, JioMartName,JioMartPrice in zip(JioMartImg, JMLink, JioMartName, JioMartPrice):
                 JioMartDetails.append(JioMartImg)
@@ -450,6 +442,7 @@ def GroceriesSearch():
             GNames = []
             GroName = []
             GroPrice = []
+            GPrice = []
             Links = []
             GroLink = []
             GroImg = []
@@ -465,8 +458,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
             Driver.get(GrofersSource)
 
@@ -484,15 +477,14 @@ def GroceriesSearch():
             for i, j in zip(GName, GNames):
                 GroName.append(i + " | " + j)
 
-            gprice = []
             for i in GrofersSoup.find_all('span', class_="plp-product__price--new"):
                 string = i.text
-                gs = string.strip()
-                gss = gs[1:]
-                gsss = gss.replace(',', '')
-                gprice.append(gsss)
+                GroPri = string.strip()
+                GroPriSrt = GroPri[1:]
+                PriSort = GroPriSrt.replace(',', '')
+                GPrice.append(PriSort)
+            GroPrice = [float(i) for i in GPrice]
 
-            GroPrice = [float(i) for i in gprice]
             Link = GrofersSoup.find_all('a', class_="product__wrapper")
             for i in Link:
                 Links.append(i.get('href'))
@@ -502,17 +494,14 @@ def GroceriesSearch():
             Img = GrofersSoup.find_all('img', class_="img-loader__img img-loader__img--shown img-loader__img--plp")
             for i in Img:
                 GroImg.append(Grofershttp + i.get('src'))
-            print(GroLink)
-            print(GroName)
 
-            bubbleSort(GroPrice,GroImg,GroName,GroLink)
+            bubbleSort(GroPrice, GroImg, GroName, GroLink)
 
             for GrofersImg, GrofersLink, GrofersName, GrofersPrice in zip(GroImg, GroLink, GroName, GroPrice):
                 GrofersDetails.append(GrofersImg)
                 GrofersDetails.append(GrofersLink)
                 GrofersDetails.append(GrofersName)
                 GrofersDetails.append(GrofersPrice)
-            print(GrofersDetails)
 
             return GrofersDetails
 
@@ -549,3 +538,5 @@ def About():
 
 if __name__ == '__main__':
     web.run(debug=True)
+
+# 9-3-21 :- Total Lines of Code = 1572 Till Date

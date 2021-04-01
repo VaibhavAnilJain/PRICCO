@@ -4,16 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">#}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
-
-{#    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>#}
-
-{#    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>#}
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -71,8 +62,15 @@
                 {% else %}
                     {% for AmazonData in range(0, (AmazonDetails | count), 4) %}
                         <div class="carousel-item">
+
+                        {% if session.LoggedIn %}
+                            <button class="btn btn-outline-danger Favorite">
+                                <i class="bi bi-suit-heart"></i>
+                            </button><br>
+                        {% endif %}
+
                             <img src="{{ AmazonDetails[AmazonData] }}"> <br>
-                            <a href="{{ AmazonDetails[AmazonData + 1] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; {{ AmazonDetails[AmazonData + 3] }}
+                            <a href="{{ AmazonDetails[AmazonData + 1] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ AmazonDetails[AmazonData + 3] }}
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -100,12 +98,18 @@
                 {% else %}
                     {% for FlipkartData in range(0, (FlipkartDetails | count), 3) %}
                         <div class="carousel-item">
+
+                            {% if session.LoggedIn %}
+                                <button class="btn btn-outline-danger Favorite">
+                                    <i class="bi bi-suit-heart"></i>
+                                </button><br>
+                            {% endif %}
+
                             <img src="">
-                            <a href="{{ FlipkartDetails[FlipkartData] }}" class="Flipkart_lnkhov">{{ FlipkartDetails[FlipkartData + 1] }}</a>&ensp;&ensp; - &ensp;&ensp; {{ FlipkartDetails[FlipkartData + 2] }}
+                            <a href="{{ FlipkartDetails[FlipkartData] }}" class="Flipkart_lnkhov">{{ FlipkartDetails[FlipkartData + 1] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ FlipkartDetails[FlipkartData + 2] }}
                         </div>
                     {% endfor %}
                 {% endif %}
-
 
                 </div>
                 <a class="carousel-control-prev" href="#FlipkartCarouselControl" role="button" data-slide="prev">
@@ -130,8 +134,15 @@
                 {% else %}
                     {% for RelianceData in range(0, (RelianceDetails | count), 4) %}
                         <div class="carousel-item">
+
+                            {% if session.LoggedIn %}
+                                <button class="btn btn-outline-danger Favorite">
+                                    <i class="bi bi-suit-heart"></i>
+                                </button><br>
+                            {% endif %}
+
                             <img src="{{ RelianceDetails[RelianceData] }}"> <br>
-                            <a href="{{ RelianceDetails[RelianceData + 1] }}" class="Reliance_lnkhov">{{ RelianceDetails[RelianceData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; {{ RelianceDetails[RelianceData + 3] }}
+                            <a href="{{ RelianceDetails[RelianceData + 1] }}" class="Reliance_lnkhov">{{ RelianceDetails[RelianceData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ RelianceDetails[RelianceData + 3] }}
                         </div>
                     {% endfor %}
                 {% endif %}
