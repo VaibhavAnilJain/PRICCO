@@ -60,7 +60,7 @@
                 {% if AmazonDetails == [] %}
                     <div class="carousel-item">Sorry for the Inconvenience. Please "Refresh" the Page to see the Products</div>
                 {% else %}
-                    {% for AmazonData in range(0, (AmazonDetails | count), 4) %}
+                    {% for AmazonData in range(0, (AmazonDetails | count), 3) %}
                         <div class="carousel-item">
 
                         {% if session.LoggedIn %}
@@ -69,8 +69,8 @@
                             </button><br>
                         {% endif %}
 
-                            <img src="{{ AmazonDetails[AmazonData] }}"> <br>
-                            <a href="{{ AmazonDetails[AmazonData + 1] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ AmazonDetails[AmazonData + 3] }}
+{#                            <img src="{{ AmazonDetails[AmazonData] }}"> <br>#}
+                            <a href="{{ AmazonDetails[AmazonData] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 1] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ AmazonDetails[AmazonData + 2] }}
                         </div>
                     {% endfor %}
                 {% endif %}

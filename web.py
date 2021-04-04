@@ -189,8 +189,8 @@ def AccessoriesSearch():
             AmazonRequest = requests.get(AmazonSource, headers = headers)
             AmazonSoup = BeautifulSoup(AmazonRequest.content, features = "lxml")
 
-            AmazonImgPage = urllib.request.urlopen(AmazonSource)
-            AmazonImgSrc = BeautifulSoup(AmazonImgPage, features = "lxml")
+            # AmazonImgPage = urllib.request.urlopen(AmazonSource)
+            # AmazonImgSrc = BeautifulSoup(AmazonImgPage, features = "lxml")
 
             for i in AmazonSoup.find_all('span', class_="a-size-medium a-color-base a-text-normal"):
                 string = i.text
@@ -221,18 +221,21 @@ def AccessoriesSearch():
             for EachLink in AmzLinks:
                 AmzLink.append(AmazonLink + EachLink)
 
-            for Img in AmazonImgSrc.findAll('img'):
-                AmzImgs.append(Img.get('src'))
-            for i in AmzImgs:
-                if i[0:33] == 'https://m.media-amazon.com/images':
-                    AmzImg.append(i)
-                else:
-                    pass
+            # for Img in AmazonSoup.findAll('img'):
+            #     AmzImgs.append(Img.get('src'))
+            # for i in AmzImgs:
+            #     if i[0:36] == 'https://m.media-amazon.com/images/I/':
+            #         AmzImg.append(i)
+            #     else:
+            #         pass
 
-            bubbleSort(AmzPrc, AmzImg, AmzLink, AmzNamFet)
 
-            for AmazonImg, AmazonLink, AmazonName, AmazonPrice in zip(AmzImg, AmzLink, AmzNamFet, AmzPrc):
-                AmazonDetails.append(AmazonImg)
+
+
+
+            bubbleSortsecond(AmzPrc, AmzLink, AmzNamFet)
+
+            for AmazonLink, AmazonName, AmazonPrice in zip(AmzLink, AmzNamFet, AmzPrc):
                 AmazonDetails.append(AmazonLink)
                 AmazonDetails.append(AmazonName)
                 AmazonDetails.append(AmazonPrice)
@@ -301,8 +304,8 @@ def AccessoriesSearch():
             RelianceVal = (Reliance[0])
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(RelianceSource)
 
@@ -395,8 +398,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(JioMartSource)
 
@@ -458,8 +461,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+            Opts.binary_location = '/usr/bin/google-chrome'
+            ChromeDriver = '/home/vaibhav/bin/chromedriver'
             Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
             Driver.get(GrofersSource)
 
