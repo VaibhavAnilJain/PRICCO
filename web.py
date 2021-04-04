@@ -524,6 +524,24 @@ def ProductSpecification():
         return render_template('ProductSpecification.html')
     return render_template('ProductSpecification.html')
 
+@web.route('/ProSpecificationSearch', methods=['POST', 'GET'])
+def ProSpecificationSearch():
+    if request.method == 'POST':
+        Search1 = request.form['Search1']
+        Search2 = request.form['Search2']
+
+
+
+        return render_template('ProSpecOutput.html')
+
+    return render_template('ProductSpecification.html')
+
+@web.route('/ProSpecOutput')
+def ProSpecOutput():
+    if 'LoggedIn' in session:
+        return render_template('ProSpecOutput.html')
+    return render_template('ProSpecOutput.html')
+
 @web.route('/Profile')
 def Profile():
     if 'LoggedIn' in session:
