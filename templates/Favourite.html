@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSSPage/StyleSheet.css') }}">
+    <script type="application/javascript" src="{{ url_for('static', filename='JSPage/JavaScript.js') }}"></script>
+
+    <title>Favourite Page</title>
+</head>
+<body class="d-flex h-100 text-center text-white user-select-none">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <div class="px-5 pt-3 pb-3 fixed-top navbar-light shadow rounded">
+            <h3 class="float-left mb-0 p-1 btn-dark rounded rainbow">PRICCO</h3>
+            <nav class="nav nav-masthead justify-content-center btn-group btn-group-toggle float-right ">
+                <a class="nav-link btn btn-dark Favourite_lnkhov" href="/">Home</a>
+
+                {% if session.LoggedIn %}
+                    <div class="btn-group" role="group">
+                        <button class="nav-link btn btn-dark dropdown-toggle Favourite_lnkhov" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
+                        <div class="dropdown-menu bg-dark">
+                            <button class="dropdown-item bg-dark disabled" style="color: #d61c59">Welcome {{ session.Fname }}</button>
+                            <a class="dropdown-item bg-dark Favourite_lnkhov" href="Favourite">Favourites</a>
+                            <a class="dropdown-item bg-dark Favourite_lnkhov" href="Profile">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item bg-dark Favourite_lnkhov" href="{{ url_for('Logout') }}">Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a class="nav-link btn btn-dark Favourite_lnkhov" href="Login">Sign In</a>
+                    <a class="nav-link btn btn-dark Favourite_lnkhov" href="Register">Sign Up</a>
+                {% endif %}
+
+                <a class="nav-link btn btn-dark Favourite_lnkhov" href="About">About</a>
+            </nav>
+        </div>
+
+        <main class="FavContentCenter pb-3">
+            <div class="card bg-light mx-auto bg-dark border-primary shadow w-50 FavAccBg">
+                <h5 class="card-header text-primary font-weight-bolder">Accessories</h5>
+                <div class="card-body">
+                    {% if FavAccName == [] %}
+                        <div class="alert alert-danger font-weight-bold" role="alert">
+                            Sorry, you haven't Saved any Products yet! &ensp; ಠ╭╮ಠ
+                        </div>
+                    {% else %}
+                        {% for AccName in range(0, (FavAccName | count), 2) %}
+                            <div class="d-flex align-items-center bd-highlight my-2 mx-2">
+                                <form action="/FavAccOutput" method="post">
+                                    💖 &ensp; <button class="card-text btn font-weight-bold FavAcc_lnkhov" name="faid" value="{{ FavAccName[AccName + 1] }}">{{ FavAccName[AccName] }}</button>
+                                </form>
+                                <form action="/DeleteAccFavName" method="post" class="ml-auto">
+                                    <button class="btn btn-danger btn-sm" name="AccId" value="{{ FavAccName[AccName + 1] }}">Remove</button><br>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div><br>
+
+            <div class="card bg-light mx-auto text-dark border-success shadow w-50 FavGroBg">
+                <h5 class="card-header text-success font-weight-bolder">Groceries</h5>
+                <div class="card-body">
+                    {% if FavGroName == [] %}
+                        <div class="alert alert-danger font-weight-bold" role="alert">
+                            Sorry, you haven't Saved any Products yet! &ensp; ಠ╭╮ಠ
+                        </div>
+                    {% else %}
+                        {% for GroName in range(0, (FavGroName | count), 2) %}
+                            <div class="d-flex align-items-center bd-highlight my-2 mx-2">
+                                <form action="/FavGroOutput" method="post">
+                                    💖 &ensp; <button class="card-text btn font-weight-bold FavGro_lnkhov" name="fgid" value="{{ FavGroName[GroName + 1] }}">{{ FavGroName[GroName] }}</button>
+                                </form>
+                                <form action="/DeleteGroFavName" method="post" class="ml-auto">
+                                    <button class="btn btn-danger btn-sm" name="GroId" value="{{ FavGroName[GroName + 1] }}">Remove</button><br>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
