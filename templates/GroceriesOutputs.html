@@ -29,7 +29,7 @@
                         <button class="nav-link btn btn-success dropdown-toggle GroceriesOutputs_lnkhov" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
                         <div class="dropdown-menu bg-success">
                             <button class="dropdown-item bg-success disabled" style="color: #F08080">Welcome {{ session.Fname }}</button>
-                            <a class="dropdown-item bg-success GroceriesOutputs_lnkhov" href="">Favourites</a>
+                            <a class="dropdown-item bg-success GroceriesOutputs_lnkhov" href="Favourite">Favourites</a>
                             <a class="dropdown-item bg-success GroceriesOutputs_lnkhov" href="Profile">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item bg-success GroceriesOutputs_lnkhov" href="{{ url_for('Logout') }}">Logout</a>
@@ -64,9 +64,11 @@
                             <div class="carousel-item">
 
                                 {% if session.LoggedIn %}
-                                    <button class="btn btn-outline-danger Favorite">
-                                        <i class="bi bi-suit-heart"></i>
-                                    </button><br>
+                                    <form action="/FavJioInp/{{ session.Id }}" method="post">
+                                        <button class="btn btn-outline-danger Favorite" name="JioName" value="{{ JioMartDetails[JioMartData + 2] }}, {{ JioMartDetails[JioMartData] }}">
+                                            <i class="bi bi-suit-heart"></i>
+                                        </button><br>
+                                    </form>
                                 {% endif %}
 
                                 <img src="{{ JioMartDetails[JioMartData] }}"><br>
@@ -100,9 +102,11 @@
                         <div class="carousel-item">
 
                             {% if session.LoggedIn %}
-                                <button class="btn btn-outline-danger Favorite">
-                                    <i class="bi bi-suit-heart"></i>
-                                </button><br>
+                                <form action="/FavGroInp/{{ session.Id }}" method="post">
+                                    <button class="btn btn-outline-danger Favorite" name="GroName" value="{{ GrofersDetails[GrofersData + 2] }}, {{ GrofersDetails[GrofersData] }}">
+                                        <i class="bi bi-suit-heart"></i>
+                                    </button><br>
+                                </form>
                             {% endif %}
 
                             <img src="{{ GrofersDetails[GrofersData] }}"><br>

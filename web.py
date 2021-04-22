@@ -55,10 +55,10 @@ def Register():
         Phone = request.form['RegisterInputPhoneNo']
 
         cur = mysql.connection.cursor()
-        cur.execute("SELECT Email FROM USERS WHERE Email ='" + Email + "'")
+        cur.execute("SELECT Email FROM users WHERE Email ='" + Email + "'")
         Email_Exist = cur.fetchone()
 
-        cur.execute("SELECT Phone FROM USERS WHERE Phone ='" + Phone + "'")
+        cur.execute("SELECT Phone FROM users WHERE Phone ='" + Phone + "'")
         Phone_Exist = cur.fetchone()
 
         if Email_Exist:
@@ -68,7 +68,7 @@ def Register():
             ErMessage = 'Phone No. Already Exist!!'
             return render_template('Register.html', ErMessage = ErMessage)
         else:
-            cur.execute("INSERT INTO USERS (Fname, Lname, Email, Paswd, Phone) VALUES (%s, %s, %s, %s, %s)", (Fname, Lname, Email, Paswd, Phone))
+            cur.execute("INSERT INTO users (Fname, Lname, Email, Paswd, Phone) VALUES (%s, %s, %s, %s, %s)", (Fname, Lname, Email, Paswd, Phone))
             mysql.connection.commit()
             return render_template('Login.html')
 
@@ -81,7 +81,7 @@ def Login():
         Paswd = request.form['LoginInputPassword']
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("SELECT * FROM USERS WHERE Email = '" + Email + "' AND Paswd = '" + Paswd + "'")
+        cur.execute("SELECT * FROM users WHERE Email = '" + Email + "' AND Paswd = '" + Paswd + "'")
         AccDetails = cur.fetchone()
 
         if AccDetails:
@@ -120,7 +120,7 @@ def UpdatePassword():
         NewPaswd = request.form['NewPasswordInputPassword']
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("UPDATE USERS SET Paswd='" + NewPaswd + "' WHERE Email ='" + Email + "' OR Phone ='" + Phone + "'")
+        cur.execute("UPDATE users SET Paswd='" + NewPaswd + "' WHERE Email ='" + Email + "' OR Phone ='" + Phone + "'")
         mysql.connection.commit()
 
         ErMessage = "Your Password has successfully Changed. Now you can go Back and Login"
@@ -133,7 +133,7 @@ def UpdatePassword():
 def DeleteAccount(Id):
     if request.method == 'POST':
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("DELETE FROM USERS WHERE Id = {0}".format(Id))
+        cur.execute("DELETE FROM users WHERE Id = {0}".format(Id))
         mysql.connection.commit()
 
         return redirect(url_for('Logout'))
@@ -144,7 +144,7 @@ def HelpMessage(Id):
         Message = request.form['MsgTextarea']
 
         cur = mysql.connection.cursor()
-        cur.execute("UPDATE USERS SET Message ='" + Message + "' WHERE Id = {0}".format(Id))
+        cur.execute("UPDATE users SET Message ='" + Message + "' WHERE Id = {0}".format(Id))
         mysql.connection.commit()
 
         disp_msg = "Sorry for the problem you have faced. We have received your issue and try to solve as soon as possible... ✍(◔◡◔)"
@@ -629,16 +629,16 @@ def Favourite():
         SessionId = str(SId)
 
         cur = mysql.connection.cursor()
-        cur.execute("SELECT PAccName FROM AccProducts WHERE Id ='" + SessionId + "'")
+        cur.execute("SELECT PAccName FROM accproducts WHERE Id ='" + SessionId + "'")
         FavAccName = cur.fetchall()
 
-        cur.execute("SELECT PAcc_Id FROM AccProducts WHERE Id ='" + SessionId + "'")
+        cur.execute("SELECT PAcc_Id FROM accproducts WHERE Id ='" + SessionId + "'")
         AccId = cur.fetchall()
 
-        cur.execute("SELECT PGroName FROM GroProducts WHERE Id ='" + SessionId + "'")
+        cur.execute("SELECT PGroName FROM groproducts WHERE Id ='" + SessionId + "'")
         FavGroName = cur.fetchall()
 
-        cur.execute("SELECT PGro_Id FROM GroProducts WHERE Id ='" + SessionId + "'")
+        cur.execute("SELECT PGro_Id FROM groproducts WHERE Id ='" + SessionId + "'")
         GroId = cur.fetchall()
         for i in FavAccName:
             for j in i:
@@ -676,7 +676,7 @@ def FavAmzInp(Id):
         Img = 'https' + c
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        cur.execute("INSERT INTO accproducts (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
         mysql.connection.commit()
         return redirect(url_for('Favourite'))
     return render_template('GroceriesOutputs.html')
@@ -686,7 +686,7 @@ def FavFlpInp(Id):
     if request.method == 'POST':
         FlpName = request.form['FlpName']
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, FlpName, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        cur.execute("INSERT INTO accproducts (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, FlpName, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
         mysql.connection.commit()
         return redirect(url_for('Favourite'))
     return render_template('GroceriesOutputs.html')
@@ -702,7 +702,7 @@ def FavRelInp(Id):
         Img = 'https' + c
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        cur.execute("INSERT INTO accproducts (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
         mysql.connection.commit()
         return redirect(url_for('Favourite'))
     return render_template('GroceriesOutputs.html')
@@ -718,7 +718,7 @@ def FavJioInp(Id):
         Img = 'https' + c
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO GROPRODUCTS (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
+        cur.execute("INSERT INTO groproducts (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
         mysql.connection.commit()
         return redirect(url_for('Favourite'))
     return render_template('GroceriesOutputs.html')
@@ -734,7 +734,7 @@ def FavGroInp(Id):
         Img = 'https' + c
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO GROPRODUCTS (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
+        cur.execute("INSERT INTO groproducts (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
         mysql.connection.commit()
         return redirect(url_for('Favourite'))
     return render_template('GroceriesOutputs.html')
@@ -744,7 +744,7 @@ def DeleteAccFavName():
     if request.method == 'POST':
         Id = request.form['AccId']
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM ACCPRODUCTS WHERE PAcc_Id ='" + Id + "'")
+        cur.execute("DELETE FROM accproducts WHERE PAcc_Id ='" + Id + "'")
         mysql.connection.commit()
     return redirect(url_for('Favourite'))
 
@@ -753,7 +753,7 @@ def DeleteGroFavName():
     if request.method == 'POST':
         Id = request.form['GroId']
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM GROPRODUCTS WHERE PGro_Id ='" + Id + "'")
+        cur.execute("DELETE FROM groproducts WHERE PGro_Id ='" + Id + "'")
         mysql.connection.commit()
     return redirect(url_for('Favourite'))
 
@@ -770,16 +770,16 @@ def FavAccOutput():
         if request.method == 'POST':
             ProName = request.form['faid']
 
-            cur.execute("SELECT PAccName, PAccImg FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            cur.execute("SELECT PAccName, PAccImg FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
             NameImg = cur.fetchall()
 
-            cur.execute("SELECT PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            cur.execute("SELECT PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
             AmzPri = cur.fetchall()
 
-            cur.execute("SELECT PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            cur.execute("SELECT PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
             FlpPri = cur.fetchall()
 
-            cur.execute("SELECT PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            cur.execute("SELECT PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
             RelPri = cur.fetchall()
 
             for i in NameImg:
@@ -804,7 +804,7 @@ def FavAccOutput():
                         relprz.append(int(j))
 
 
-        cur.execute("SELECT * FROM ADemo ")
+        cur.execute("SELECT * FROM ademo ")
         data = cur.fetchall()
 
         for i in data:
@@ -829,13 +829,13 @@ def FavGroOutput():
         if request.method == 'POST':
             ProName = request.form['fgid']
 
-            cur.execute("SELECT PGroName, PGroImg FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            cur.execute("SELECT PGroName, PGroImg FROM groproducts WHERE PGro_Id ='" + ProName + "'")
             NameImg = cur.fetchall()
 
-            cur.execute("SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            cur.execute("SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM groproducts WHERE PGro_Id ='" + ProName + "'")
             JioPri = cur.fetchall()
 
-            cur.execute("SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            cur.execute("SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM groproducts WHERE PGro_Id ='" + ProName + "'")
             GrofPri = cur.fetchall()
 
             for i in NameImg:
@@ -855,7 +855,7 @@ def FavGroOutput():
                         grofprz.append(int(j))
 
 
-        cur.execute("SELECT * FROM GDemo ")
+        cur.execute("SELECT * FROM gdemo ")
         data = cur.fetchall()
 
         for i in data:

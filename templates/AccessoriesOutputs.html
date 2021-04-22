@@ -29,7 +29,7 @@
                         <button class="nav-link btn btn-dark dropdown-toggle AccessoriesOutputs_lnkhov" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
                         <div class="dropdown-menu bg-dark">
                             <button class="dropdown-item bg-dark disabled" style="color: #d61c59">Welcome {{ session.Fname }}</button>
-                            <a class="dropdown-item bg-dark AccessoriesOutputs_lnkhov" href="">Favourites</a>
+                            <a class="dropdown-item bg-dark AccessoriesOutputs_lnkhov" href="Favourite">Favourites</a>
                             <a class="dropdown-item bg-dark AccessoriesOutputs_lnkhov" href="Profile">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item bg-dark AccessoriesOutputs_lnkhov" href="{{ url_for('Logout') }}">Logout</a>
@@ -60,17 +60,19 @@
                 {% if AmazonDetails == [] %}
                     <div class="carousel-item">Sorry for the Inconvenience. Please "Refresh" the Page to see the Products</div>
                 {% else %}
-                    {% for AmazonData in range(0, (AmazonDetails | count), 3) %}
+                    {% for AmazonData in range(0, (AmazonDetails | count), 4) %}
                         <div class="carousel-item">
 
                         {% if session.LoggedIn %}
-                            <button class="btn btn-outline-danger Favorite">
-                                <i class="bi bi-suit-heart"></i>
-                            </button><br>
+                            <form action="/FavAmzInp/{{ session.Id }}" method="post">
+                                <button class="btn btn-outline-danger Favorite" name="AmzName" value="{{ AmazonDetails[AmazonData + 2] }}, {{ AmazonDetails[AmazonData] }}">
+                                    <i class="bi bi-suit-heart"></i>
+                                </button><br>
+                            </form>
                         {% endif %}
 
-{#                            <img src="{{ AmazonDetails[AmazonData] }}"> <br>#}
-                            <a href="{{ AmazonDetails[AmazonData] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 1] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ AmazonDetails[AmazonData + 2] }}
+                            <img src="{{ AmazonDetails[AmazonData] }}"> <br>
+                            <a href="{{ AmazonDetails[AmazonData + 1] }}" class="Amazon_lnkhov">{{ AmazonDetails[AmazonData + 2] }}</a>&ensp;&ensp; - &ensp;&ensp; ₹{{ AmazonDetails[AmazonData + 3] }}
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -100,9 +102,11 @@
                         <div class="carousel-item">
 
                             {% if session.LoggedIn %}
-                                <button class="btn btn-outline-danger Favorite">
-                                    <i class="bi bi-suit-heart"></i>
-                                </button><br>
+                                <form action="/FavFlpInp/{{ session.Id }}" method="post">
+                                    <button class="btn btn-outline-danger Favorite" name="FlpName" value="{{ FlipkartDetails[FlipkartData + 1] }}">
+                                        <i class="bi bi-suit-heart"></i>
+                                    </button><br>
+                                </form>
                             {% endif %}
 
                             <img src="">
@@ -136,9 +140,11 @@
                         <div class="carousel-item">
 
                             {% if session.LoggedIn %}
-                                <button class="btn btn-outline-danger Favorite">
-                                    <i class="bi bi-suit-heart"></i>
-                                </button><br>
+                                <form action="/FavRelInp/{{ session.Id }}" method="post">
+                                    <button class="btn btn-outline-danger Favorite" name="RelName" value="{{ RelianceDetails[RelianceData + 2] }}, {{ RelianceDetails[RelianceData] }}">
+                                        <i class="bi bi-suit-heart"></i>
+                                    </button><br>
+                                </form>
                             {% endif %}
 
                             <img src="{{ RelianceDetails[RelianceData] }}"> <br>
