@@ -47,8 +47,11 @@
         <main class="ProSpecContentCenter">
 
             <div class="row">
-                <div class="column">
-                    <table class="table-bordered spectable">
+                <div class="col">
+                    <div class="card text-white bg-info">
+                        <div class="card-header">Name 1</div>
+                        <div class="card-body">
+                            <table class="table-bordered spectable">
                         <tr class="spectr">
                             <td class="text-center spectd font-weight-bold" colspan="2">{{ infobox1['name'] }}</td>
                         </tr>
@@ -73,10 +76,15 @@
                             <td class="spectd">{{ infobox1['battery'] }}</td>
                         </tr>
                     </table>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="column">
-                    <table class="table-bordered spectable">
+                <div class="col">
+                    <div class="card text-white bg-info">
+                        <div class="card-header">Name 2</div>
+                        <div class="card-body">
+                            <table class="table-bordered spectable">
                         <tr class="spectr">
                             <td class="text-center spectd font-weight-bold" colspan="2">{{ infobox2['name'] }}</td>
                         </tr>
@@ -101,8 +109,20 @@
                             <td class="spectd">{{ infobox2['battery'] }}</td>
                         </tr>
                     </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+{#            <div class="row">#}
+{#                <div class="column">#}
+{#                    #}
+{#                </div>#}
+{##}
+{#                <div class="column">#}
+{#                    #}
+{#                </div>#}
+{#            </div>#}
 
         </main>
     </div>
