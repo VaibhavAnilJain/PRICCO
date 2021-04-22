@@ -14,7 +14,9 @@ web.secret_key = 'PRICCO_WEB_123$&'
 web.config['MYSQL_USER'] = 'root'
 web.config['MYSQL_PASSWORD'] = ''
 web.config['MYSQL_DB'] = 'pricco'
-web.config['MYSQL_HOST'] = 'localhost'
+web.config['MYSQL_HOST'] = '127.0.0.1'
+
+
 mysql = MySQL(web)
 
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
@@ -190,9 +192,13 @@ def AccessoriesSearch():
             AmazonSource = "https://www.amazon.in/s?k=" + AmazonSrc
             AmazonRequest = requests.get(AmazonSource, headers = headers)
             AmazonSoup = BeautifulSoup(AmazonRequest.content, features = "lxml")
+            # anp = AmazonSoup.find_all('span', class_="a-size-medium a-color-base a-text-normal")
+            # nm = []
+            # nn = anp.span.find(class_="a-size-medium a-color-base a-text-normal")
+            # print(nn)
 
-            # AmazonImgPage = urllib.request.urlopen(AmazonSource)
-            # AmazonImgSrc = BeautifulSoup(AmazonImgPage, features = "lxml")
+            AmazonImgPage = urllib.request.urlopen(AmazonSource)
+            AmazonImgSrc = BeautifulSoup(AmazonImgPage, features = "lxml")
 
             for i in AmazonSoup.find_all('span', class_="a-size-medium a-color-base a-text-normal"):
                 string = i.text
@@ -223,13 +229,13 @@ def AccessoriesSearch():
             for EachLink in AmzLinks:
                 AmzLink.append(AmazonLink + EachLink)
 
-            # for Img in AmazonSoup.findAll('img'):
-            #     AmzImgs.append(Img.get('src'))
-            # for i in AmzImgs:
-            #     if i[0:36] == 'https://m.media-amazon.com/images/I/':
-            #         AmzImg.append(i)
-            #     else:
-            #         pass
+            for Img in AmazonSoup.findAll('img'):
+                AmzImgs.append(Img.get('src'))
+            for i in AmzImgs:
+                if i[0:36] == 'https://m.media-amazon.com/images/I/':
+                    AmzImg.append(i)
+                else:
+                    pass
 
 
 
@@ -320,7 +326,7 @@ def AccessoriesSearch():
                 string = i.text
                 RelName.append(string.strip())
 
-            for i in RelianceSoup.find_all('span', class_="sc-bxivhb dmBTBc"):
+            for i in RelianceSoup.find_all('span', class_="sc-bdVaJa hKEXmy"):
                 string = i.text
                 RelPri = string.strip()
                 RelPriSrt = RelPri[1:]
@@ -337,23 +343,33 @@ def AccessoriesSearch():
                     RelLink.append(RelianceLink + i)
                 else:
                     pass
-
+            n = []
             Img = RelianceSoup.find_all('img')
             for i in Img:
                 Imgs.append(i.get('data-srcset'))
+
             for i in Imgs:
+                if i != None:
+                    n.append(i)
+
+            for i in n:
                 if i.startswith("/medias"):
                     RelImg.append(RelianceLink + i)
                 else:
                     pass
 
-            bubbleSort(RelPrice, RelName, RelLink, RelImg)
 
-            for RelianceImg, RelianceLink, RelianceName, ReliancePrice in zip(RelImg, RelLink, RelName, RelPrice):
-                RelianceDetails.append(RelianceImg)
-                RelianceDetails.append(RelianceLink)
-                RelianceDetails.append(RelianceName)
-                RelianceDetails.append(ReliancePrice)
+
+            try:
+                bubbleSort(RelPrice, RelName, RelLink, RelImg)
+
+                for RelianceImg, RelianceLink, RelianceName, ReliancePrice in zip(RelImg, RelLink, RelName, RelPrice):
+                    RelianceDetails.append(RelianceImg)
+                    RelianceDetails.append(RelianceLink)
+                    RelianceDetails.append(RelianceName)
+                    RelianceDetails.append(ReliancePrice)
+            except:
+                RelianceDetails = []
 
             return RelianceDetails
 
@@ -361,7 +377,7 @@ def AccessoriesSearch():
         FlipkartDetails = Flipkart()
         RelianceDetails = RelianceDigi()
 
-        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
+        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails,  FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
 
     return render_template('Accessories.html')
 
