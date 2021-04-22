@@ -192,10 +192,6 @@ def AccessoriesSearch():
             AmazonSource = "https://www.amazon.in/s?k=" + AmazonSrc
             AmazonRequest = requests.get(AmazonSource, headers = headers)
             AmazonSoup = BeautifulSoup(AmazonRequest.content, features = "lxml")
-            # anp = AmazonSoup.find_all('span', class_="a-size-medium a-color-base a-text-normal")
-            # nm = []
-            # nn = anp.span.find(class_="a-size-medium a-color-base a-text-normal")
-            # print(nn)
 
             AmazonImgPage = urllib.request.urlopen(AmazonSource)
             AmazonImgSrc = BeautifulSoup(AmazonImgPage, features = "lxml")
@@ -229,21 +225,23 @@ def AccessoriesSearch():
             for EachLink in AmzLinks:
                 AmzLink.append(AmazonLink + EachLink)
 
-            for Img in AmazonSoup.findAll('img'):
+            for Img in AmazonImgSrc.findAll('img'):
                 AmzImgs.append(Img.get('src'))
             for i in AmzImgs:
-                if i[0:36] == 'https://m.media-amazon.com/images/I/':
+                if i[0:33] == 'https://m.media-amazon.com/images':
                     AmzImg.append(i)
                 else:
                     pass
 
+            AN = AmzNamFet[-16:]
+            AL = AmzLink[-16:]
+            AP = AmzPrc[-16:]
+            AI = AmzImg[-16:]
 
+            bubbleSort(AP, AL, AI, AN)
 
-
-
-            bubbleSortsecond(AmzPrc, AmzLink, AmzNamFet)
-
-            for AmazonLink, AmazonName, AmazonPrice in zip(AmzLink, AmzNamFet, AmzPrc):
+            for AmazonImg, AmazonLink, AmazonName, AmazonPrice in zip(AI, AL, AN, AP):
+                AmazonDetails.append(AmazonImg)
                 AmazonDetails.append(AmazonLink)
                 AmazonDetails.append(AmazonName)
                 AmazonDetails.append(AmazonPrice)
@@ -252,7 +250,7 @@ def AccessoriesSearch():
 
         def Flipkart():
             FlipkartName = []
-            FlipkartPrice = []
+            FlpPri = []
             FlipkartLinks = []
             FlkLink = []
             FlipkartDetails = []
@@ -275,7 +273,8 @@ def AccessoriesSearch():
                 FlkPri = string.strip()
                 FlkPriSrt = FlkPri[1:]
                 PriSort = FlkPriSrt.replace(',', '')
-                FlipkartPrice.append(PriSort)
+                FlpPri.append(PriSort)
+            FlipkartPrice = [float(i) for i in FlpPri]
 
             Links = FlipkartSoup.find_all("a", attrs={'class': '_1fQZEK'})
             for Link in Links:
@@ -299,6 +298,7 @@ def AccessoriesSearch():
             Links = []
             RelLink = []
             Imgs = []
+            Image = []
             RelImg = []
             RelianceDetails = []
 
@@ -343,22 +343,18 @@ def AccessoriesSearch():
                     RelLink.append(RelianceLink + i)
                 else:
                     pass
-            n = []
+
             Img = RelianceSoup.find_all('img')
             for i in Img:
                 Imgs.append(i.get('data-srcset'))
-
             for i in Imgs:
                 if i != None:
-                    n.append(i)
-
-            for i in n:
+                    Image.append(i)
+            for i in Image:
                 if i.startswith("/medias"):
                     RelImg.append(RelianceLink + i)
                 else:
                     pass
-
-
 
             try:
                 bubbleSort(RelPrice, RelName, RelLink, RelImg)
@@ -377,7 +373,7 @@ def AccessoriesSearch():
         FlipkartDetails = Flipkart()
         RelianceDetails = RelianceDigi()
 
-        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails,  FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
+        return render_template('AccessoriesOutputs.html', AmazonDetails = AmazonDetails, FlipkartDetails = FlipkartDetails, RelianceDetails = RelianceDetails)
 
     return render_template('Accessories.html')
 
@@ -627,6 +623,264 @@ def ProSpecOutput():
     if 'LoggedIn' in session:
         return render_template('ProSpecOutput.html')
     return render_template('ProSpecOutput.html')
+
+@web.route('/Favourite')
+def Favourite():
+    if 'LoggedIn' in session:
+        AN = []
+        AI = []
+        GN = []
+        GI = []
+        AccData = []
+        GroData = []
+
+        SId = session['Id']
+        SessionId = str(SId)
+
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT PAccName FROM AccProducts WHERE Id ='" + SessionId + "'")
+        FavAccName = cur.fetchall()
+
+        cur.execute("SELECT PAcc_Id FROM AccProducts WHERE Id ='" + SessionId + "'")
+        AccId = cur.fetchall()
+
+        cur.execute("SELECT PGroName FROM GroProducts WHERE Id ='" + SessionId + "'")
+        FavGroName = cur.fetchall()
+
+        cur.execute("SELECT PGro_Id FROM GroProducts WHERE Id ='" + SessionId + "'")
+        GroId = cur.fetchall()
+        for i in FavAccName:
+            for j in i:
+                AN.append(j)
+        for i in AccId:
+            for j in i:
+                AI.append(j)
+
+        for i in FavGroName:
+            for j in i:
+                GN.append(j)
+        for i in GroId:
+            for j in i:
+                GI.append(j)
+
+        for FavAName, AId in zip(AN, AI):
+            AccData.append(FavAName)
+            AccData.append(AId)
+
+        for FavGName, GId in zip(GN, GI):
+            GroData.append(FavGName)
+            GroData.append(GId)
+
+        return render_template('Favourite.html', FavAccName = AccData, FavGroName = GroData)
+    return render_template('Favourite.html')
+
+@web.route('/FavAmzInp/<string:Id>', methods=['POST', 'GET'])
+def FavAmzInp(Id):
+    if request.method == 'POST':
+        NameImg = request.form['AmzName']
+        Split = NameImg.split(" https")
+        b = Split[0]
+        c = Split[1]
+        Name = b[:-1]
+        Img = 'https' + c
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        mysql.connection.commit()
+        return redirect(url_for('Favourite'))
+    return render_template('GroceriesOutputs.html')
+
+@web.route('/FavFlpInp/<string:Id>', methods=['POST', 'GET'])
+def FavFlpInp(Id):
+    if request.method == 'POST':
+        FlpName = request.form['FlpName']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, FlpName, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        mysql.connection.commit()
+        return redirect(url_for('Favourite'))
+    return render_template('GroceriesOutputs.html')
+
+@web.route('/FavRelInp/<string:Id>', methods=['POST', 'GET'])
+def FavRelInp(Id):
+    if request.method == 'POST':
+        NameImg = request.form['RelName']
+        Split = NameImg.split(" https")
+        b = Split[0]
+        c = Split[1]
+        Name = b[:-1]
+        Img = 'https' + c
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO ACCPRODUCTS (Id, PAccName, PAccImg, PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5, PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5, PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+        mysql.connection.commit()
+        return redirect(url_for('Favourite'))
+    return render_template('GroceriesOutputs.html')
+
+@web.route('/FavJioInp/<string:Id>', methods=['POST', 'GET'])
+def FavJioInp(Id):
+    if request.method == 'POST':
+        NameImg = request.form['JioName']
+        Split = NameImg.split(" https")
+        b = Split[0]
+        c = Split[1]
+        Name = b[:-1]
+        Img = 'https' + c
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO GROPRODUCTS (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
+        mysql.connection.commit()
+        return redirect(url_for('Favourite'))
+    return render_template('GroceriesOutputs.html')
+
+@web.route('/FavGroInp/<string:Id>', methods=['POST', 'GET'])
+def FavGroInp(Id):
+    if request.method == 'POST':
+        NameImg = request.form['GroName']
+        Split = NameImg.split(" https")
+        b = Split[0]
+        c = Split[1]
+        Name = b[:-1]
+        Img = 'https' + c
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO GROPRODUCTS (Id, PGroName, PGroImg, PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5, PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (Id, Name, Img, None, None, None, None, None, None, None, None, None, None))
+        mysql.connection.commit()
+        return redirect(url_for('Favourite'))
+    return render_template('GroceriesOutputs.html')
+
+@web.route('/DeleteAccFavName', methods=['POST', 'GET'])
+def DeleteAccFavName():
+    if request.method == 'POST':
+        Id = request.form['AccId']
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM ACCPRODUCTS WHERE PAcc_Id ='" + Id + "'")
+        mysql.connection.commit()
+    return redirect(url_for('Favourite'))
+
+@web.route('/DeleteGroFavName', methods=['POST', 'GET'])
+def DeleteGroFavName():
+    if request.method == 'POST':
+        Id = request.form['GroId']
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM GROPRODUCTS WHERE PGro_Id ='" + Id + "'")
+        mysql.connection.commit()
+    return redirect(url_for('Favourite'))
+
+@web.route('/FavAccOutput', methods=['POST', 'GET'])
+def FavAccOutput():
+    if 'LoggedIn' in session:
+        temp = []
+        nameimg = []
+        amzprz = []
+        flpprz = []
+        relprz = []
+        cur = mysql.connection.cursor()
+
+        if request.method == 'POST':
+            ProName = request.form['faid']
+
+            cur.execute("SELECT PAccName, PAccImg FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            NameImg = cur.fetchall()
+
+            cur.execute("SELECT PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            AmzPri = cur.fetchall()
+
+            cur.execute("SELECT PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            FlpPri = cur.fetchall()
+
+            cur.execute("SELECT PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5 FROM ACCPRODUCTS WHERE PAcc_Id ='" + ProName + "'")
+            RelPri = cur.fetchall()
+
+            for i in NameImg:
+                for j in i:
+                    nameimg.append(str(j))
+            Name = nameimg[0]
+            Img = nameimg[1]
+
+            for i in AmzPri:
+                for j in i:
+                    if j != None:
+                        amzprz.append(int(j))
+
+            for i in FlpPri:
+                for j in i:
+                    if j != None:
+                        flpprz.append(int(j))
+
+            for i in RelPri:
+                for j in i:
+                    if j != None:
+                        relprz.append(int(j))
+
+
+        cur.execute("SELECT * FROM ADemo ")
+        data = cur.fetchall()
+
+        for i in data:
+            for j in i:
+                temp.append(str(j))
+
+        DName = temp[1]
+        DImg = temp[2]
+
+        return render_template('FavAccOutput.html', Name = Name, Img = Img, amzprz = amzprz, flpprz = flpprz, relprz = relprz, DName = DName, DImg = DImg)
+    return render_template('FavAccOutput.html')
+
+@web.route('/FavGroOutput', methods=['GET', 'POST'])
+def FavGroOutput():
+    if 'LoggedIn' in session:
+        temp = []
+        nameimg = []
+        jioprz = []
+        grofprz = []
+        cur = mysql.connection.cursor()
+
+        if request.method == 'POST':
+            ProName = request.form['fgid']
+
+            cur.execute("SELECT PGroName, PGroImg FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            NameImg = cur.fetchall()
+
+            cur.execute("SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            JioPri = cur.fetchall()
+
+            cur.execute("SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM GROPRODUCTS WHERE PGro_Id ='" + ProName + "'")
+            GrofPri = cur.fetchall()
+
+            for i in NameImg:
+                for j in i:
+                    nameimg.append(str(j))
+            Name = nameimg[0]
+            Img = nameimg[1]
+
+            for i in JioPri:
+                for j in i:
+                    if j != None:
+                        jioprz.append(int(j))
+
+            for i in GrofPri:
+                for j in i:
+                    if j != None:
+                        grofprz.append(int(j))
+
+
+        cur.execute("SELECT * FROM GDemo ")
+        data = cur.fetchall()
+
+        for i in data:
+            for j in i:
+                temp.append(str(j))
+
+        DName = temp[1]
+        DImg = temp[2]
+        prz1 = []
+
+        prz = temp[3:]
+        for i in prz:
+            prz1.append(int(i))
+
+        return render_template('FavGroOutput.html', Name = Name, Img = Img, jioprz = jioprz, grofprz = grofprz, DName = DName, DImg = DImg, prz = prz1)
+    return render_template('FavGroOutput.html')
 
 @web.route('/Profile')
 def Profile():

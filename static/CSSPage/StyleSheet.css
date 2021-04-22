@@ -15,22 +15,27 @@ body {
     background-size: cover;
 }
 
-.Accessories_BgImg {
+.Accessories_BgImg, .FavAccBg, .FavAcc_BgImg {
     background-image: url("/static/Images/Ebg_g40.png");
     background-position: center;
     background-size: cover;
 }
 
-.Groceries_BgImg {
+.Groceries_BgImg, .FavGroBg, .FavGro_BgImg {
     background: white;
     background-image: url("/static/Images/Gbg_g35.png");
     background-position: center;
     background-size: cover;
 }
 
-.home_lnkhov, .ProductPrice_lnkhov, .Accessories_lnkhov, .AccessoriesOutputs_lnkhov, .Profile_lnkhov, .Groceries_lnkhov, .GroceriesOutputs_lnkhov, .ProductSpecification_lnkhov, .ProSpecOutput_lnkhov, .About_lnkhov, .login_lnkhov, .Amazon_lnkhov, .Flipkart_lnkhov, .Reliance_lnkhov, .JioMart_lnkhov, .Grofers_lnkhov {
+.home_lnkhov, .ProductPrice_lnkhov, .Accessories_lnkhov, .AccessoriesOutputs_lnkhov, .Profile_lnkhov, .Groceries_lnkhov, .GroceriesOutputs_lnkhov, .ProductSpecification_lnkhov, .ProSpecOutput_lnkhov, .Favourite_lnkhov, .About_lnkhov, .login_lnkhov, .Amazon_lnkhov, .Flipkart_lnkhov, .Reliance_lnkhov, .JioMart_lnkhov, .Grofers_lnkhov, .FavAcc_lnkhov, .FavAccOut_lnkhov, .FavGroOut_lnkhov {
     color: white;
 }
+
+.FavGro_lnkhov {
+    color: #343a40;
+}
+
 .home_lnkhov:hover, .login_lnkhov:hover {
     color: #e7d84b;
 }
@@ -43,7 +48,7 @@ body {
     color: #EC7063;
 }
 
-.AccessoriesOutputs_lnkhov:hover, .Profile_lnkhov:hover {
+.AccessoriesOutputs_lnkhov:hover, .Profile_lnkhov:hover, .Favourite_lnkhov:hover {
     color: #d61c59;
 }
 
@@ -68,7 +73,17 @@ body {
     text-decoration: none;
 }
 
-.JioMart_lnkhov:hover, .Grofers_lnkhov:hover {
+.FavAcc_lnkhov:hover,.FavAccOut_lnkhov:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.FavGro_lnkhov:hover {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.JioMart_lnkhov:hover, .Grofers_lnkhov:hover, .FavGroOut_lnkhov:hover {
     color: #e7d84b;
     text-decoration: none;
 }
@@ -91,7 +106,7 @@ body {
     padding-top: 18%;
 }
 
-.AccessoriesOutputsContentCenter, .GroceriesOutputsContentCenter {
+.AccessoriesOutputsContentCenter, .GroceriesOutputsContentCenter, .FavContentCenter  {
     padding-top: 130px;
 }
 
@@ -231,6 +246,42 @@ svg {
     opacity: 1;
 }
 
+.ADemoTool .ADemoToolText {
+    visibility: hidden;
+    width: 500px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -50%;
+    margin-left: -545px;
+}
+.ADemoTool:hover .ADemoToolText {
+    visibility: visible;
+    opacity: 1;
+}
+
+.GDemoTool .GDemoToolText {
+    visibility: hidden;
+    width: 500px;
+    background-color: rgba(34 ,153, 84, 0.8);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -50%;
+    margin-left: -545px;
+}
+.GDemoTool:hover .GDemoToolText {
+    visibility: visible;
+    opacity: 1;
+}
+
 .rainbow {
     text-shadow: 2px 2px 4px #7B7D7D;
     -webkit-animation: rainbow 5s ease-in-out infinite;
@@ -283,10 +334,18 @@ svg {
     display: none;
 }
 
-#AmazonCarouselControl, #FlipkartCarouselControl, #RelDigiCarouselControl {
+#AmazonCarouselControl, #FlipkartCarouselControl, #RelDigiCarouselControl, #ProductCarouselControl, #DemoProductCarouselControl {
     background-color: rgba(21, 67, 96, 0.8);
 }
 
-#JoiMartCarouselControl, #GrofersCarouselControl {
+#JoiMartCarouselControl, #GrofersCarouselControl, #GProductCarouselControl, #DemoGProductCarouselControl {
     background-color: rgba(34 ,153, 84, 0.8);
 }
+
+/*red: 'rgb(255, 99, 132)',*/
+/*orange: 'rgb(255, 159, 64)',*/
+/*yellow: 'rgb(255, 205, 86)',*/
+/*green: 'rgb(75, 192, 192)',*/
+/*blue: 'rgb(54, 162, 235)',*/
+/*purple: 'rgb(153, 102, 255)',*/
+/*grey: 'rgb(201, 203, 207)'*/

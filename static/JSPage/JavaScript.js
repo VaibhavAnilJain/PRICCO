@@ -62,4 +62,9 @@ $(document).ready(function () {
     setTimeout(function () {
         $('.AccessoriesOutputsAlert, .GroceriesOutputsAlert').alert('close');
     }, 8000);
+
+    $('#customSwitch1').on('change', function () {
+        $('#DemoProductCarouselControl').toggle(this.checked)
+        $('#DemoGProductCarouselControl').toggle(this.checked)
+    });
 })
