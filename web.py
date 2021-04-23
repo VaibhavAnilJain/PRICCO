@@ -863,6 +863,95 @@ def FavGroOutput():
                     if j != None:
                         grofprz.append(int(j))
 
+            def favScrape():
+
+                gfPrice = []
+
+                grofershttp = "https:"
+                grofersSeperator = '+'
+                names = Name.lower()
+                namess = names.replace('g fresh','')
+                name = namess.replace('per','1')
+                namesss = name.replace('|','')
+
+                grofers = namesss.split(" ")
+                while ("" in grofers):
+                    grofers.remove("")
+                if grofers[-1] == 'g' or 'kg':
+                    grofers[-2:] = [''.join(grofers[-2:])]
+                else:
+                    pass
+                grofersSrc = grofersSeperator.join(grofers)
+
+                grofersLink = "https://grofers.com"
+                grofersSource = "https://grofers.com/s/?q=" + grofersSrc
+
+                Opts = Options()
+                Opts.add_argument("--headless")
+                Opts.binary_location = '/usr/bin/google-chrome'
+                ChromeDriver = '/home/vaibhav/bin/chromedriver'
+                Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
+                Driver.get(grofersSource)
+
+                grofersSourceSoup = Driver.page_source
+                grofersSoup = BeautifulSoup(grofersSourceSoup, features='lxml')
+                time.sleep(1)
+                Driver.close()
+
+                gPrice = []
+                for i in grofersSoup.find_all('span', class_="plp-product__price--new"):
+                    string = i.text
+                    groPri = string.strip()
+                    groPriSrt = groPri[1:]
+                    priSort = groPriSrt.replace(',', '')
+                    gPrice.append(priSort)
+                gfPrice= [float(i) for i in gPrice]
+
+                #jiomart Scrape
+
+                jioMartSeperator = '%20'
+                names = Name.replace('G Fresh', '')
+                name = names.replace('1', 'per')
+
+                jioMart = name.split(" ")
+                jioMartSrc = jioMartSeperator.join(jioMart)
+
+                jioMartLink = "https://www.jiomart.com"
+                jioMartSource = "https://www.jiomart.com/catalogsearch/result?q=" + jioMartSrc
+
+                Opts = Options()
+                Opts.add_argument("--headless")
+                Opts.binary_location = '/usr/bin/google-chrome'
+                ChromeDriver = '/home/vaibhav/bin/chromedriver'
+                Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
+                Driver.get(jioMartSource)
+
+                jioMartSourceSoup = Driver.page_source
+                jioMartSoup = BeautifulSoup(jioMartSourceSoup, features='lxml')
+                time.sleep(1)
+                Driver.close()
+
+                jPrice = []
+                for i in jioMartSoup.find_all('span', attrs={'id': 'final_price'}):
+                    string = i.text
+                    JmtPri = string.strip()
+                    JmtPriSrt = JmtPri[1:]
+                    PriSort = JmtPriSrt.replace(',', '')
+                    jPrice.append(PriSort)
+                jioMartPrice = [float(i) for i in jPrice]
+
+                jioprice = str(jioMartPrice[0])
+                gffPrice = str(gfPrice[0])
+                print(jioprice)
+                print(gffPrice)
+                print(ProId)
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE groproducts SET PJmtPrz1 ='" + jioprice + "' WHERE PGro_Id ='" + ProId + "'")
+                abc = mysql.connect.commit()
+                return jioprice, gffPrice
+
+        gfavpr = favScrape()
+        print(gfavpr)
 
         cur.execute("SELECT * FROM gdemo ")
         data = cur.fetchall()
@@ -898,3 +987,4 @@ if __name__ == '__main__':
     web.run(debug=True)
 
 # 9-3-21 :- Total Lines of Code = 1572 Till Date
+
