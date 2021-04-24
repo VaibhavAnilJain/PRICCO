@@ -61,6 +61,10 @@
                     },
                     options: {
                         color: 'rgb(255, 255, 255)',
+                        radius: 10,
+                        interaction: {
+                            intersect: false,
+                        },
                         plugins: {
                             legend: {
                                 labels: {
@@ -177,6 +181,10 @@
                     },
                     options: {
                         color: 'rgb(255, 255, 255)',
+                        radius: 10,
+                        interaction: {
+                            intersect: false,
+                        },
                         plugins: {
                             legend: {
                                 labels: {
@@ -293,17 +301,17 @@
                     <div class="carousel-item">
                         <p class="font-weight-bold"><u>Amazon</u></p><hr>
                         <img src="{{ Img }}"><br>
-                        {{ Name }} - ₹22<br>
+                        {{ Name }} - ₹{{ APrz }}<br>
                     </div>
                     <div class="carousel-item">
                         <p class="font-weight-bold"><u>Flipkart</u></p><hr>
                         <img src="{{ Img }}"><br>
-                        {{ Name }} - ₹22<br>
+                        {{ Name }} - ₹{{ FPrz }}<br>
                     </div>
                     <div class="carousel-item">
                         <p class="font-weight-bold"><u>Reliance Digital</u></p><hr>
                         <img src="{{ Img }}"><br>
-                        {{ Name }} - ₹22<br>
+                        {{ Name }} - ₹{{ RPrz }}<br>
                     </div>
 
                 </div>
@@ -335,7 +343,7 @@
                     </div>
                     <div class="carousel-item">
                         <img src="{{ DImg }}"><br>
-                        {{ DName }} - ₹71990<br>
+                        {{ DName }} - ₹{{ DPrz }}<br>
                     </div>
 
                 </div>

@@ -46,6 +46,10 @@
                     },
                     options: {
                         color: 'rgb(24, 106, 59)',
+                        radius: 10,
+                        interaction: {
+                            intersect: false,
+                        },
                         plugins: {
                             legend: {
                                 labels: {
@@ -147,6 +151,10 @@
                     },
                     options: {
                         color: 'rgb(24, 106, 59)',
+                        radius: 10,
+                        interaction: {
+                            intersect: false,
+                        },
                         plugins: {
                             legend: {
                                 labels: {
@@ -263,12 +271,12 @@
                     <div class="carousel-item">
                         <p class="font-weight-bold"><u>Jio Mart</u></p><hr>
                         <img src="{{ Img }}"><br>
-                        {{ Name }} - ₹22<br>
+                        {{ Name }} - ₹{{ JPrz }}<br>
                     </div>
                     <div class="carousel-item">
                         <p class="font-weight-bold"><u>Grofers</u></p><hr>
                         <img src="{{ Img }}"><br>
-                        {{ Name }} - ₹22<br>
+                        {{ Name }} - ₹{{ GPrz }}<br>
                     </div>
 
                 </div>

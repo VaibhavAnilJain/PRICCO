@@ -56,7 +56,7 @@
                         {% for AccName in range(0, (FavAccName | count), 2) %}
                             <div class="d-flex align-items-center bd-highlight my-2 mx-2">
                                 <form action="/FavAccOutput" method="post">
-                                    💖 &ensp; <button class="card-text btn font-weight-bold FavAcc_lnkhov" name="faid" value="{{ FavAccName[AccName + 1] }}">{{ FavAccName[AccName] }}</button>
+                                    💖 &ensp; <button class="card-text btn font-weight-bold FavAcc_lnkhov" name="faid" value="{{ FavAccName[AccName + 1] }}, {{ FavAccName[AccName] }}">{{ FavAccName[AccName] }}</button>
                                 </form>
                                 <form action="/DeleteAccFavName" method="post" class="ml-auto">
                                     <button class="btn btn-danger btn-sm" name="AccId" value="{{ FavAccName[AccName + 1] }}">Remove</button><br>
@@ -78,7 +78,7 @@
                         {% for GroName in range(0, (FavGroName | count), 2) %}
                             <div class="d-flex align-items-center bd-highlight my-2 mx-2">
                                 <form action="/FavGroOutput" method="post">
-                                    💖 &ensp; <button class="card-text btn font-weight-bold FavGro_lnkhov" name="fgid" value="{{ FavGroName[GroName + 1] }}">{{ FavGroName[GroName] }}</button>
+                                    💖 &ensp; <button class="card-text btn font-weight-bold FavGro_lnkhov" name="fgid" value="{{ FavGroName[GroName + 1] }}, {{ FavGroName[GroName] }}">{{ FavGroName[GroName] }}</button>
                                 </form>
                                 <form action="/DeleteGroFavName" method="post" class="ml-auto">
                                     <button class="btn btn-danger btn-sm" name="GroId" value="{{ FavGroName[GroName + 1] }}">Remove</button><br>

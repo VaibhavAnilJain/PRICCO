@@ -312,8 +312,8 @@ def AccessoriesSearch():
             RelianceVal = (Reliance[0])
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(RelianceSource)
 
@@ -412,8 +412,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options = Opts, executable_path = ChromeDriver)
             Driver.get(JioMartSource)
 
@@ -475,8 +475,8 @@ def GroceriesSearch():
 
             Opts = Options()
             Opts.add_argument("--headless")
-            Opts.binary_location = '/usr/bin/google-chrome'
-            ChromeDriver = '/home/vaibhav/bin/chromedriver'
+            Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+            ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
             Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
             Driver.get(GrofersSource)
 
@@ -777,53 +777,142 @@ def FavAccOutput():
         cur = mysql.connection.cursor()
 
         if request.method == 'POST':
-            ProName = request.form['faid']
+            Idname = request.form['faid']
+            idname = Idname.split(", ")
 
-            cur.execute("SELECT PAccName, PAccImg FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
-            NameImg = cur.fetchall()
+            Id = idname[0]
+            Name = idname[1]
 
-            cur.execute("SELECT PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
-            AmzPri = cur.fetchall()
+            def accfavpro():
 
-            cur.execute("SELECT PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
-            FlpPri = cur.fetchall()
+                amazonSeperator = '+'
+                amazon = Name.split(" ")
+                amazonSrc = amazonSeperator.join(amazon)
 
-            cur.execute("SELECT PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5 FROM accproducts WHERE PAcc_Id ='" + ProName + "'")
-            RelPri = cur.fetchall()
+                amazonLink = "https://amazon.in"
+                amazonSource = "https://www.amazon.in/s?k=" + amazonSrc
+                amazonRequest = requests.get(amazonSource, headers=headers)
+                amazonSoup = BeautifulSoup(amazonRequest.content, features="lxml")
 
-            for i in NameImg:
-                for j in i:
-                    nameimg.append(str(j))
-            Name = nameimg[0]
-            Img = nameimg[1]
+                aPrice = []
+                for i in amazonSoup.find_all('span', class_="a-price-whole"):
+                    string = i.text
+                    amzPri = string.strip()
+                    amzPriSrt = amzPri.replace(',', '')
+                    priSort = amzPriSrt.replace('.', '')
+                    aPrice.append(priSort)
+                amzPrc = [float(i) for i in aPrice]
 
-            for i in AmzPri:
-                for j in i:
-                    if j != None:
-                        amzprz.append(int(j))
+                # flipkart
+                flipkartSeperator = '%20'
+                flipkart = Name.split(" ")
+                flipkartSrc = flipkartSeperator.join(flipkart)
 
-            for i in FlpPri:
-                for j in i:
-                    if j != None:
-                        flpprz.append(int(j))
+                flipkartLink = "https://flipkart.in"
+                flipkartSource = "https://www.flipkart.com/search?q=" + flipkartSrc
+                flipkartRequest = requests.get(flipkartSource, headers=headers)
+                flipkartSoup = BeautifulSoup(flipkartRequest.content, features="lxml")
 
-            for i in RelPri:
-                for j in i:
-                    if j != None:
-                        relprz.append(int(j))
+                flpPri = []
+                for i in flipkartSoup.find_all('div', class_="_30jeq3 _1_WHN1"):
+                    string = i.text
+                    flkPri = string.strip()
+                    flkPriSrt = flkPri[1:]
+                    priSort = flkPriSrt.replace(',', '')
+                    flpPri.append(priSort)
+                flipkartPrice = [float(i) for i in flpPri]
 
+                # reldigi
+                relianceSeperator = '%20'
+                reliance = Name.split(" ")
+                relianceSrc = relianceSeperator.join(reliance)
 
+                rrlianceLink = "https://www.reliancedigital.in"
+                relianceSource = "https://www.reliancedigital.in/search?q=" + relianceSrc
+
+                # relianceVal = (reliance[0])
+                Opts = Options()
+                Opts.add_argument("--headless")
+                Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+                ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+                Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
+                Driver.get(relianceSource)
+
+                relianceSourceSoup = Driver.page_source
+                relianceSoup = BeautifulSoup(relianceSourceSoup, features='lxml')
+                time.sleep(1)
+                Driver.close()
+                rPrice = []
+                for i in relianceSoup.find_all('span', class_="sc-bdVaJa hKEXmy"):
+                    string = i.text
+                    relPri = string.strip()
+                    relPriSrt = relPri[1:]
+                    priceSort = relPriSrt.replace(',', '')
+                    rPrice.append(priceSort)
+                relPrice = [float(i) for i in rPrice]
+
+                amzprice = amzPrc[0]
+                flpprice = flipkartPrice[0]
+                relprice = relPrice[0]
+
+                return amzprice, flpprice, relprice
+
+        accfav = accfavpro()
+        ap = str(accfav[0])
+        fp = str(accfav[1])
+        rp = str(accfav[2])
+
+        # Price UPDATE Query
+        cur.execute("UPDATE accproducts SET PAmzPrz1 ='" + ap + "', PFlpPrz1 ='" + fp + "', PRelPrz1 ='" + rp + "' WHERE PAcc_Id ='" + Id + "'")
+        mysql.connection.commit()
+
+        # Amz, Flp & Rel SELECT Queries
+        cur.execute("SELECT PAccName, PAccImg FROM accproducts WHERE PAcc_Id ='" + Id + "'")
+        NameImg = cur.fetchall()
+
+        cur.execute("SELECT PAmzPrz1, PAmzPrz2, PAmzPrz3, PAmzPrz4, PAmzPrz5 FROM accproducts WHERE PAcc_Id ='" + Id + "'")
+        AmzPri = cur.fetchall()
+
+        cur.execute("SELECT PFlpPrz1, PFlpPrz2, PFlpPrz3, PFlpPrz4, PFlpPrz5 FROM accproducts WHERE PAcc_Id ='" + Id + "'")
+        FlpPri = cur.fetchall()
+
+        cur.execute("SELECT PRelPrz1, PRelPrz2, PRelPrz3, PRelPrz4, PRelPrz5 FROM accproducts WHERE PAcc_Id ='" + Id + "'")
+        RelPri = cur.fetchall()
+
+        for i in NameImg:
+            for j in i:
+                nameimg.append(str(j))
+        Name = nameimg[0]
+        Img = nameimg[1]
+
+        for i in AmzPri:
+            for j in i:
+                if j != None:
+                    amzprz.append(float(j))
+
+        for i in FlpPri:
+            for j in i:
+                if j != None:
+                    flpprz.append(float(j))
+
+        for i in RelPri:
+            for j in i:
+                if j != None:
+                    relprz.append(float(j))
+
+        # Demo DB SELECT Query
         cur.execute("SELECT * FROM ademo ")
         data = cur.fetchall()
 
         for i in data:
             for j in i:
                 temp.append(str(j))
-
+        print(temp)
         DName = temp[1]
         DImg = temp[2]
+        DPrz = temp[7]
 
-        return render_template('FavAccOutput.html', Name = Name, Img = Img, amzprz = amzprz, flpprz = flpprz, relprz = relprz, DName = DName, DImg = DImg)
+        return render_template('FavAccOutput.html', Name = Name, Img = Img, APrz = ap, FPrz = fp, RPrz = rp, amzprz = amzprz, flpprz = flpprz, relprz = relprz, DName = DName, DImg = DImg, DPrz = DPrz)
     return render_template('FavAccOutput.html')
 
 @web.route('/FavGroOutput', methods=['GET', 'POST'])
@@ -836,32 +925,11 @@ def FavGroOutput():
         cur = mysql.connection.cursor()
 
         if request.method == 'POST':
-            ProName = request.form['fgid']
+            Idname = request.form['fgid']
+            idname = Idname.split(", ")
 
-            cur.execute("SELECT PGroName, PGroImg FROM groproducts WHERE PGro_Id ='" + ProName + "'")
-            NameImg = cur.fetchall()
-
-            cur.execute("SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM groproducts WHERE PGro_Id ='" + ProName + "'")
-            JioPri = cur.fetchall()
-
-            cur.execute("SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM groproducts WHERE PGro_Id ='" + ProName + "'")
-            GrofPri = cur.fetchall()
-
-            for i in NameImg:
-                for j in i:
-                    nameimg.append(str(j))
-            Name = nameimg[0]
-            Img = nameimg[1]
-
-            for i in JioPri:
-                for j in i:
-                    if j != None:
-                        jioprz.append(int(j))
-
-            for i in GrofPri:
-                for j in i:
-                    if j != None:
-                        grofprz.append(int(j))
+            Id = idname[0]
+            Name = idname[1]
 
             def favScrape():
 
@@ -888,8 +956,8 @@ def FavGroOutput():
 
                 Opts = Options()
                 Opts.add_argument("--headless")
-                Opts.binary_location = '/usr/bin/google-chrome'
-                ChromeDriver = '/home/vaibhav/bin/chromedriver'
+                Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+                ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
                 Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
                 Driver.get(grofersSource)
 
@@ -921,8 +989,8 @@ def FavGroOutput():
 
                 Opts = Options()
                 Opts.add_argument("--headless")
-                Opts.binary_location = '/usr/bin/google-chrome'
-                ChromeDriver = '/home/vaibhav/bin/chromedriver'
+                Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+                ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
                 Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
                 Driver.get(jioMartSource)
 
@@ -940,19 +1008,50 @@ def FavGroOutput():
                     jPrice.append(PriSort)
                 jioMartPrice = [float(i) for i in jPrice]
 
-                jioprice = str(jioMartPrice[0])
-                gffPrice = str(gfPrice[0])
-                print(jioprice)
-                print(gffPrice)
-                print(ProId)
-                cur = mysql.connection.cursor()
-                cur.execute("UPDATE groproducts SET PJmtPrz1 ='" + jioprice + "' WHERE PGro_Id ='" + ProId + "'")
-                abc = mysql.connect.commit()
+                jioprice = jioMartPrice[0]
+                gffPrice = gfPrice[0]
+
                 return jioprice, gffPrice
 
         gfavpr = favScrape()
-        print(gfavpr)
+        jp = str(gfavpr[0])
+        gp = str(gfavpr[1])
 
+        # Price UPDATE Query
+        cur.execute("UPDATE groproducts SET PJmtPrz1 ='" + jp + "', PGrofPrz1 ='" + gp + "' WHERE PGro_Id ='" + Id + "'")
+        mysql.connection.commit()
+
+
+        # Jio & Grof SELECT Queries
+        cur.execute("SELECT PGroName, PGroImg FROM groproducts WHERE PGro_Id ='" + Id + "'")
+        NameImg = cur.fetchall()
+
+        cur.execute(
+            "SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
+        JioPri = cur.fetchall()
+
+        cur.execute(
+            "SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
+        GrofPri = cur.fetchall()
+
+        for i in NameImg:
+            for j in i:
+                nameimg.append(str(j))
+        name = nameimg[0]
+        Img = nameimg[1]
+
+        for i in JioPri:
+            for j in i:
+                if j != None:
+                    jioprz.append(float(j))
+
+        for i in GrofPri:
+            for j in i:
+                if j != None:
+                    grofprz.append(float(j))
+
+
+        # Demo DB SELECT Query
         cur.execute("SELECT * FROM gdemo ")
         data = cur.fetchall()
 
@@ -968,7 +1067,7 @@ def FavGroOutput():
         for i in prz:
             prz1.append(int(i))
 
-        return render_template('FavGroOutput.html', Name = Name, Img = Img, jioprz = jioprz, grofprz = grofprz, DName = DName, DImg = DImg, prz = prz1)
+        return render_template('FavGroOutput.html',Name = name, Img = Img, JPrz = jp, GPrz = gp,  jioprz = jioprz, grofprz = grofprz, DName = DName, DImg = DImg, prz = prz1)
     return render_template('FavGroOutput.html')
 
 @web.route('/Profile')
