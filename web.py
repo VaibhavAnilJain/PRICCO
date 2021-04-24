@@ -547,75 +547,129 @@ def ProSpecificationSearch():
         Search1 = request.form['Search1']
         Search2 = request.form['Search2']
 
-        se1 = Search1.title()
-        se2 = Search2.title()
-
-        s1 = se1.replace(' ','_')
-        s2 = se2.replace(' ', '_')
-
-        so1 = wptools.page(s1).get_parse()
-        so2 = wptools.page(s2).get_parse()
-
-
-        infobox1 = so1.data['infobox']
-        infobox2 = so2.data['infobox']
-
-
-        m1 = infobox1['memory'].replace('|',' ')
-        m4 = m1.replace('&nbsp', ' ')
-        mem1 = re.sub(r'[^A-Za-z0-9 .]+', '',m4)
-        infobox1['memory'] = mem1
-
-        m2 = infobox2['memory'].replace('|',' ')
-        m3 = m2.replace('&nbsp', ' ')
-        mem2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',m3)
-        infobox2['memory'] = mem2
-
-        s1 = infobox1['storage'].replace('|',' ')
-        s6 = s1.replace('&nbsp', ' ')
-        str1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',s6)
-        infobox1['storage'] = str1
-
-        s2 = infobox2['storage'].replace('|',' ')
-        s5 = s2.replace('&nbsp', ' ')
-        str2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',s5)
-        infobox2['storage'] = str2
-
-        fc1 = infobox1['front_camera'].replace('|',' ')
-        f4 = fc1.replace('&nbsp', ' ')
-        fcam1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',f4)
-        infobox1['front_camera'] = fcam1
-
-        fc2 = infobox2['front_camera'].replace('|',' ')
-        f3 = fc2.replace('&nbsp', ' ')
-        fcam2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',f3)
-        infobox2['front_camera'] = fcam2
-
-        rc1 = infobox1['rear_camera'].replace('|', ' ')
-        r4 = rc1.replace('&nbsp', ' ')
-        rcam1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', r4)
-        infobox1['rear_camera'] = rcam1
-
-        rc2 = infobox2['rear_camera'].replace('|', ' ')
-        r3 = rc2.replace('&nbsp', ' ')
-        rcam2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', r3)
-        infobox2['rear_camera'] = rcam2
-
-        b1 = infobox1['battery'].replace('|', ' ')
-        b4 = b1.replace('&nbsp', ' ')
-        bt1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', b4)
-        infobox1['battery'] = bt1
-
-        b2 = infobox2['battery'].replace('|', ' ')
-        b3 = b2.replace('&nbsp',' ')
-        bt2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', b3)
-        infobox2['battery'] = bt2
-
-
+        # se1 = Search1.title()
+        # se2 = Search2.title()
+        #
+        # s1 = se1.replace(' ','_')
+        # s2 = se2.replace(' ', '_')
+        #
+        # so1 = wptools.page(s1).get_parse()
+        # so2 = wptools.page(s2).get_parse()
+        #
+        #
+        # infobox1 = so1.data['infobox']
+        # infobox2 = so2.data['infobox']
+        #
+        #
+        # m1 = infobox1['memory'].replace('|',' ')
+        # m4 = m1.replace('&nbsp', ' ')
+        # mem1 = re.sub(r'[^A-Za-z0-9 .]+', '',m4)
+        # infobox1['memory'] = mem1
+        #
+        # m2 = infobox2['memory'].replace('|',' ')
+        # m3 = m2.replace('&nbsp', ' ')
+        # mem2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',m3)
+        # infobox2['memory'] = mem2
+        #
+        # s1 = infobox1['storage'].replace('|',' ')
+        # s6 = s1.replace('&nbsp', ' ')
+        # str1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',s6)
+        # infobox1['storage'] = str1
+        #
+        # s2 = infobox2['storage'].replace('|',' ')
+        # s5 = s2.replace('&nbsp', ' ')
+        # str2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',s5)
+        # infobox2['storage'] = str2
+        #
+        # fc1 = infobox1['front_camera'].replace('|',' ')
+        # f4 = fc1.replace('&nbsp', ' ')
+        # fcam1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',f4)
+        # infobox1['front_camera'] = fcam1
+        #
+        # fc2 = infobox2['front_camera'].replace('|',' ')
+        # f3 = fc2.replace('&nbsp', ' ')
+        # fcam2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '',f3)
+        # infobox2['front_camera'] = fcam2
+        #
+        # rc1 = infobox1['rear_camera'].replace('|', ' ')
+        # r4 = rc1.replace('&nbsp', ' ')
+        # rcam1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', r4)
+        # infobox1['rear_camera'] = rcam1
+        #
+        # rc2 = infobox2['rear_camera'].replace('|', ' ')
+        # r3 = rc2.replace('&nbsp', ' ')
+        # rcam2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', r3)
+        # infobox2['rear_camera'] = rcam2
+        #
+        # b1 = infobox1['battery'].replace('|', ' ')
+        # b4 = b1.replace('&nbsp', ' ')
+        # bt1 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', b4)
+        # infobox1['battery'] = bt1
+        #
+        # b2 = infobox2['battery'].replace('|', ' ')
+        # b3 = b2.replace('&nbsp',' ')
+        # bt2 = re.sub(r'[^A-Za-z0-9 .:/()=-]+', '', b3)
+        # infobox2['battery'] = bt2
 
 
-        return render_template('ProSpecOutput.html', infobox1 = infobox1, infobox2 = infobox2)
+        #91
+        si1 = Search1.title()
+        si2 = Search2.title()
+        a1 = si1.lower()
+        a1 = a1.replace(' ', '-')
+        a1 = a1 + '-price-in-india'
 
+        a2 = si2.lower()
+        a2 = a2.replace(' ', '-')
+        a2 = a2 + '-price-in-india'
+
+        n1src = "https://www.91mobiles.com/" + a1
+        n1req = requests.get(n1src, headers=headers)
+        n1soup = BeautifulSoup(n1req.content, features="lxml")
+        t1 = []
+
+        st1 = []
+        stt1 = []
+        for i in n1soup.find_all('td', class_ = 'spec_des'):
+            s1 = i.text
+            t1.append(s1)
+        for i in t1:
+            s = i.replace("\n","")
+            s1 = s.strip()
+            st1.append(s1)
+
+        stt1 = st1[:5]
+
+        links1 = n1soup.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
+        for i in links1:
+            l1 = i.get('src')
+        stt1.append(l1[2:])
+        print(stt1)
+
+
+        n2src = "https://www.91mobiles.com/" + a2
+        n2req = requests.get(n2src, headers=headers)
+        n2soup = BeautifulSoup(n2req.content, features="lxml")
+        t2 = []
+
+        st2 = []
+        stt2 = []
+        for i in n2soup.find_all('td', class_='spec_des'):
+            s2 = i.text
+            t2.append(s2)
+        for i in t2:
+            s22 = i.replace("\n", "")
+            s2 = s22.strip()
+            st2.append(s2)
+        stt2 = st2[:5]
+
+        links2 = n2soup.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
+        for i in links2:
+            l2 = i.get('src')
+        stt2.append(l2[2:])
+        print(stt2)
+        return render_template('ProSpecOutput.html')
+# infobox1 = infobox1, infobox2 = infobox2
     return render_template('ProductSpecification.html')
 
 @web.route('/ProSpecOutput')
