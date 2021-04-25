@@ -1,11 +1,10 @@
 from flask import Flask, render_template, redirect, request, url_for, session
 from selenium.webdriver.chrome.options import Options
+from flask_mail import Mail, Message
+from flask_mysqldb import MySQL
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from flask_mysqldb import MySQL
 import requests, time, urllib, MySQLdb.cursors
-import wptools,re
-
 
 web = Flask(__name__)
 
@@ -14,10 +13,16 @@ web.secret_key = 'PRICCO_WEB_123$&'
 web.config['MYSQL_USER'] = 'root'
 web.config['MYSQL_PASSWORD'] = ''
 web.config['MYSQL_DB'] = 'pricco'
-web.config['MYSQL_HOST'] = '127.0.0.1'
-
-
+web.config['MYSQL_HOST'] = 'localhost'
 mysql = MySQL(web)
+
+web.config['MAIL_SERVER'] = 'smtp.gmail.com'
+web.config['MAIL_PORT'] = 465
+web.config['MAIL_USERNAME'] = 'priccoweb@gmail.com'
+web.config['MAIL_PASSWORD'] = 'Pricc@web11'
+web.config['MAIL_USE_TLS'] = False
+web.config['MAIL_USE_SSL'] = True
+mail = Mail(web)
 
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
            "Accept-Encoding": "gzip, deflate",
@@ -547,9 +552,7 @@ def ProSpecificationSearch():
         Search1 = request.form['Search1']
         Search2 = request.form['Search2']
 
-        # se1 = Search1.title()
-        # se2 = Search2.title()
-        #
+
         # s1 = se1.replace(' ','_')
         # s2 = se2.replace(' ', '_')
         #
@@ -559,8 +562,7 @@ def ProSpecificationSearch():
         #
         # infobox1 = so1.data['infobox']
         # infobox2 = so2.data['infobox']
-        #
-        #
+
         # m1 = infobox1['memory'].replace('|',' ')
         # m4 = m1.replace('&nbsp', ' ')
         # mem1 = re.sub(r'[^A-Za-z0-9 .]+', '',m4)
@@ -612,64 +614,64 @@ def ProSpecificationSearch():
         # infobox2['battery'] = bt2
 
 
-        #91
-        si1 = Search1.title()
-        si2 = Search2.title()
-        a1 = si1.lower()
-        a1 = a1.replace(' ', '-')
-        a1 = a1 + '-price-in-india'
+        table1 = []
+        serstp1 = []
+        serreselt1 = []
+        table2 = []
+        serstp2 = []
+        serreselt2 = []
 
-        a2 = si2.lower()
-        a2 = a2.replace(' ', '-')
-        a2 = a2 + '-price-in-india'
+        # Search 1
+        serop1 = Search1.title()
+        ser1 = Search1.lower()
+        serrep1 = ser1.replace(' ', '-')
+        sercon1 = serrep1 + '-price-in-india'
 
-        n1src = "https://www.91mobiles.com/" + a1
-        n1req = requests.get(n1src, headers=headers)
-        n1soup = BeautifulSoup(n1req.content, features="lxml")
-        t1 = []
+        sersrc1 = "https://www.91mobiles.com/" + sercon1
+        serreq1 = requests.get(sersrc1, headers=headers)
+        sersoup1 = BeautifulSoup(serreq1.content, features="lxml")
 
-        st1 = []
-        stt1 = []
-        for i in n1soup.find_all('td', class_ = 'spec_des'):
+        for i in sersoup1.find_all('td', class_ = 'spec_des'):
             s1 = i.text
-            t1.append(s1)
-        for i in t1:
-            s = i.replace("\n","")
-            s1 = s.strip()
-            st1.append(s1)
+            table1.append(s1)
 
-        stt1 = st1[:5]
+        for i in table1:
+            se1 = i.replace("\n", "")
+            ser1 = se1.strip()
+            serstp1.append(ser1)
+        serreselt1 = serstp1[:6]
 
-        links1 = n1soup.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
-        for i in links1:
-            l1 = i.get('src')
-        stt1.append(l1[2:])
-        print(stt1)
+        ilnk1 = sersoup1.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
+        for i in ilnk1:
+            img1 = i.get('src')
+            serreselt1.append(img1)
 
+        # Search 2
+        serop2 = Search2.title()
+        ser2 = Search2.lower()
+        serrep2 = ser2.replace(' ', '-')
+        sercon2 = serrep2 + '-price-in-india'
 
-        n2src = "https://www.91mobiles.com/" + a2
-        n2req = requests.get(n2src, headers=headers)
-        n2soup = BeautifulSoup(n2req.content, features="lxml")
-        t2 = []
+        sersrc2 = "https://www.91mobiles.com/" + sercon2
+        serreq2 = requests.get(sersrc2, headers=headers)
+        sersoup2 = BeautifulSoup(serreq2.content, features="lxml")
 
-        st2 = []
-        stt2 = []
-        for i in n2soup.find_all('td', class_='spec_des'):
+        for i in sersoup2.find_all('td', class_ = 'spec_des'):
             s2 = i.text
-            t2.append(s2)
-        for i in t2:
-            s22 = i.replace("\n", "")
-            s2 = s22.strip()
-            st2.append(s2)
-        stt2 = st2[:5]
+            table2.append(s2)
 
-        links2 = n2soup.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
-        for i in links2:
-            l2 = i.get('src')
-        stt2.append(l2[2:])
-        print(stt2)
-        return render_template('ProSpecOutput.html')
-# infobox1 = infobox1, infobox2 = infobox2
+        for i in table2:
+            se2 = i.replace("\n", "")
+            ser2 = se2.strip()
+            serstp2.append(ser2)
+        serreselt2 = serstp2[:6]
+
+        ilnk2 = sersoup2.find_all("img", attrs={'class': 'overview_lrg_pic_img'})
+        for i in ilnk2:
+            img2 = i.get('src')
+            serreselt2.append(img2)
+
+        return render_template('ProSpecOutput.html', serreselt1 = serreselt1, serreselt2 = serreselt2 ,Name1 = serop1, Name2 = serop2)
     return render_template('ProductSpecification.html')
 
 @web.route('/ProSpecOutput')
@@ -828,17 +830,18 @@ def FavAccOutput():
         amzprz = []
         flpprz = []
         relprz = []
+        przA = []
         cur = mysql.connection.cursor()
 
         if request.method == 'POST':
-            Idname = request.form['faid']
-            idname = Idname.split(", ")
+            IdName = request.form['faid']
+            idname = IdName.split(", ")
 
             Id = idname[0]
             Name = idname[1]
 
             def accfavpro():
-
+                # Amazon
                 amazonSeperator = '+'
                 amazon = Name.split(" ")
                 amazonSrc = amazonSeperator.join(amazon)
@@ -884,7 +887,6 @@ def FavAccOutput():
                 rrlianceLink = "https://www.reliancedigital.in"
                 relianceSource = "https://www.reliancedigital.in/search?q=" + relianceSrc
 
-                # relianceVal = (reliance[0])
                 Opts = Options()
                 Opts.add_argument("--headless")
                 Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
@@ -954,19 +956,23 @@ def FavAccOutput():
                 if j != None:
                     relprz.append(float(j))
 
-        # Demo DB SELECT Query
+        # Demo SELECT Query
         cur.execute("SELECT * FROM ademo ")
         data = cur.fetchall()
 
         for i in data:
             for j in i:
                 temp.append(str(j))
-        print(temp)
+
         DName = temp[1]
         DImg = temp[2]
-        DPrz = temp[7]
+        DPrz =  temp[7]
 
-        return render_template('FavAccOutput.html', Name = Name, Img = Img, APrz = ap, FPrz = fp, RPrz = rp, amzprz = amzprz, flpprz = flpprz, relprz = relprz, DName = DName, DImg = DImg, DPrz = DPrz)
+        prz = temp[3:]
+        for i in prz:
+            przA.append(int(i))
+
+        return render_template('FavAccOutput.html', Name = Name, Img = Img, APrz = ap, FPrz = fp, RPrz = rp, amzprz = amzprz, flpprz = flpprz, relprz = relprz, DName = DName, DImg = DImg, DPrz = DPrz, przA = przA)
     return render_template('FavAccOutput.html')
 
 @web.route('/FavGroOutput', methods=['GET', 'POST'])
@@ -976,6 +982,9 @@ def FavGroOutput():
         nameimg = []
         jioprz = []
         grofprz = []
+
+        uemail = session['Email']
+
         cur = mysql.connection.cursor()
 
         if request.method == 'POST':
@@ -986,9 +995,40 @@ def FavGroOutput():
             Name = idname[1]
 
             def favScrape():
+                # jiomart Scrape
+                jioMartSeperator = '%20'
+                names = Name.replace('G Fresh', '')
+                name = names.replace('1', 'per')
 
+                jioMart = name.split(" ")
+                jioMartSrc = jioMartSeperator.join(jioMart)
+
+                jioMartLink = "https://www.jiomart.com"
+                jioMartSource = "https://www.jiomart.com/catalogsearch/result?q=" + jioMartSrc
+
+                Opts = Options()
+                Opts.add_argument("--headless")
+                Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+                ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
+                Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
+                Driver.get(jioMartSource)
+
+                jioMartSourceSoup = Driver.page_source
+                jioMartSoup = BeautifulSoup(jioMartSourceSoup, features='lxml')
+                time.sleep(1)
+                Driver.close()
+
+                jPrice = []
+                for i in jioMartSoup.find_all('span', attrs={'id': 'final_price'}):
+                    string = i.text
+                    JmtPri = string.strip()
+                    JmtPriSrt = JmtPri[1:]
+                    PriSort = JmtPriSrt.replace(',', '')
+                    jPrice.append(PriSort)
+                jioMartPrice = [float(i) for i in jPrice]
+
+                # Grofers
                 gfPrice = []
-
                 grofershttp = "https:"
                 grofersSeperator = '+'
                 names = Name.lower()
@@ -1029,39 +1069,6 @@ def FavGroOutput():
                     gPrice.append(priSort)
                 gfPrice= [float(i) for i in gPrice]
 
-                #jiomart Scrape
-
-                jioMartSeperator = '%20'
-                names = Name.replace('G Fresh', '')
-                name = names.replace('1', 'per')
-
-                jioMart = name.split(" ")
-                jioMartSrc = jioMartSeperator.join(jioMart)
-
-                jioMartLink = "https://www.jiomart.com"
-                jioMartSource = "https://www.jiomart.com/catalogsearch/result?q=" + jioMartSrc
-
-                Opts = Options()
-                Opts.add_argument("--headless")
-                Opts.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-                ChromeDriver = 'D:\PRICCO_TYProject\chromedriver.exe'
-                Driver = webdriver.Chrome(options=Opts, executable_path=ChromeDriver)
-                Driver.get(jioMartSource)
-
-                jioMartSourceSoup = Driver.page_source
-                jioMartSoup = BeautifulSoup(jioMartSourceSoup, features='lxml')
-                time.sleep(1)
-                Driver.close()
-
-                jPrice = []
-                for i in jioMartSoup.find_all('span', attrs={'id': 'final_price'}):
-                    string = i.text
-                    JmtPri = string.strip()
-                    JmtPriSrt = JmtPri[1:]
-                    PriSort = JmtPriSrt.replace(',', '')
-                    jPrice.append(PriSort)
-                jioMartPrice = [float(i) for i in jPrice]
-
                 jioprice = jioMartPrice[0]
                 gffPrice = gfPrice[0]
 
@@ -1075,23 +1082,20 @@ def FavGroOutput():
         cur.execute("UPDATE groproducts SET PJmtPrz1 ='" + jp + "', PGrofPrz1 ='" + gp + "' WHERE PGro_Id ='" + Id + "'")
         mysql.connection.commit()
 
-
         # Jio & Grof SELECT Queries
         cur.execute("SELECT PGroName, PGroImg FROM groproducts WHERE PGro_Id ='" + Id + "'")
         NameImg = cur.fetchall()
 
-        cur.execute(
-            "SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
+        cur.execute("SELECT PJmtPrz1, PJmtPrz2, PJmtPrz3, PJmtPrz4, PJmtPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
         JioPri = cur.fetchall()
 
-        cur.execute(
-            "SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
+        cur.execute("SELECT PGrofPrz1, PGrofPrz2, PGrofPrz3, PGrofPrz4, PGrofPrz5 FROM groproducts WHERE PGro_Id ='" + Id + "'")
         GrofPri = cur.fetchall()
 
         for i in NameImg:
             for j in i:
                 nameimg.append(str(j))
-        name = nameimg[0]
+        Name = nameimg[0]
         Img = nameimg[1]
 
         for i in JioPri:
@@ -1104,8 +1108,7 @@ def FavGroOutput():
                 if j != None:
                     grofprz.append(float(j))
 
-
-        # Demo DB SELECT Query
+        # Demo SELECT Query
         cur.execute("SELECT * FROM gdemo ")
         data = cur.fetchall()
 
@@ -1115,13 +1118,39 @@ def FavGroOutput():
 
         DName = temp[1]
         DImg = temp[2]
-        prz1 = []
+        DPrz = temp[7]
+        przJ = []
+        przG = []
 
-        prz = temp[3:]
+        prz = temp[3:-5]
         for i in prz:
-            prz1.append(int(i))
+            przJ.append(int(i))
 
-        return render_template('FavGroOutput.html',Name = name, Img = Img, JPrz = jp, GPrz = gp,  jioprz = jioprz, grofprz = grofprz, DName = DName, DImg = DImg, prz = prz1)
+        prz = temp[8:]
+        for i in prz:
+            przG.append(int(i))
+
+        min1 = min(przJ)
+        min2 = min(przG)
+
+        def notifJ():
+            msg = Message('ATTENTION! Price Drop DETECTED', sender='priccoweb@gmail.com', recipients=[uemail])
+            msg.body = "Hello, this msg was sent to inform you that {} is available at ₹{} on JioMart".format(DName, min1)
+            mail.send(msg)
+            return "email has been sent"
+
+        def notifG():
+            msg = Message('ATTENTION! Price Drop DETECTED', sender='priccoweb@gmail.com', recipients=[uemail])
+            msg.body = "Hello, this msg was sent to inform you that {} is available at ₹{} on Grofers".format(DName, min2)
+            mail.send(msg)
+            return "email has been sent"
+
+        if przJ[-1] == min1:
+            notifJ()
+        if przG[-1] == min2:
+            notifG()
+
+        return render_template('FavGroOutput.html', Name = Name, Img = Img, JPrz = jp, GPrz = gp,  jioprz = jioprz, grofprz = grofprz, DName = DName, DImg = DImg, przJ = przJ, przG = przG, DPrz = DPrz)
     return render_template('FavGroOutput.html')
 
 @web.route('/Profile')
@@ -1136,8 +1165,14 @@ def About():
         return render_template('About.html')
     return render_template('About.html')
 
+# @web.cli.command()
+# def scheduled():
+#
+#     print(str(datetime.utcnow()))
+#     print(str(datetime.utcnow()))
+#     print(str(datetime.utcnow()))
+
 if __name__ == '__main__':
     web.run(debug=True)
 
 # 9-3-21 :- Total Lines of Code = 1572 Till Date
-

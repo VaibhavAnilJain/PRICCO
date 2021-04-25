@@ -29,7 +29,7 @@
                         <button class="nav-link btn btn-dark dropdown-toggle ProSpecOutput_lnkhov" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
                         <div class="dropdown-menu bg-dark">
                             <button class="dropdown-item bg-dark disabled" style="color: #EC7063">Welcome {{ session.Fname }}</button>
-                            <a class="dropdown-item bg-dark ProSpecOutput_lnkhov" href="">Favourites</a>
+                            <a class="dropdown-item bg-dark ProSpecOutput_lnkhov" href="Favourite">Favourites</a>
                             <a class="dropdown-item bg-dark ProSpecOutput_lnkhov" href="Profile">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item bg-dark ProSpecOutput_lnkhov" href="{{ url_for('Logout') }}">Logout</a>
@@ -46,77 +46,88 @@
 
         <main class="ProSpecContentCenter">
 
-{#            <div class="row">#}
-{#                <div class="col">#}
-{#                    <div class="card text-white bg-info">#}
-{#                        <div class="card-header">{{ infobox1['name'] }}</div>#}
-{#                        <div class="card-body">#}
-{#                            <table class="table-bordered spectable">#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Front Camera</td>#}
-{#                            <td class="spectd">{{ infobox1['front_camera'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Rear Camera</td>#}
-{#                            <td class="spectd">{{ infobox1['rear_camera'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Storage</td>#}
-{#                            <td class="spectd">{{ infobox1['storage'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Memory</td>#}
-{#                            <td class="spectd">{{ infobox1['memory'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Battery</td>#}
-{#                            <td class="spectd">{{ infobox1['battery'] }}</td>#}
-{#                        </tr>#}
-{#                    </table>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col">#}
-{#                    <div class="card text-white bg-info">#}
-{#                        <div class="card-header">{{ infobox2['name'] }}</div>#}
-{#                        <div class="card-body">#}
-{#                            <table class="table-bordered spectable">#}
-{#                         <tr class="spectr">#}
-{#                            <td class="spectd">Front Camera</td>#}
-{#                            <td class="spectd">{{ infobox2['front_camera'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Rear Camera</td>#}
-{#                            <td class="spectd">{{ infobox2['rear_camera'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Storage</td>#}
-{#                            <td class="spectd">{{ infobox2['storage'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Memory</td>#}
-{#                            <td class="spectd">{{ infobox2['memory'] }}</td>#}
-{#                        </tr>#}
-{#                        <tr class="spectr">#}
-{#                            <td class="spectd">Battery</td>#}
-{#                            <td class="spectd">{{ infobox2['battery'] }}</td>#}
-{#                        </tr>#}
-{#                    </table>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            <div class="row pb-3">
+                <div class="col">
+                    <div class="card text-white bg-info">
+                        <h3 class="card-header font-weight-bold">{{ Name1 }}</h3>
+                        <div class="card-body">
+                            {% if serreselt1 == [] %}
+                                <h5 class="card-title">Sorry, No Data Found. 😥</h5>
+                            {% else %}
+                                <img src="{{ serreselt1[6] }}"><hr>
+                                <table class="spectable">
+                                    <tr class="spectr">
+                                        <td class="spectd">Ram</td>
+                                        <td class="spectd">{{ serreselt1[0] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Processor</td>
+                                        <td class="spectd">{{ serreselt1[1] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Rear Camera</td>
+                                        <td class="spectd">{{ serreselt1[2] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Front Camera</td>
+                                        <td class="spectd">{{ serreselt1[3] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Display</td>
+                                        <td class="spectd">{{ serreselt1[4] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Battery</td>
+                                        <td class="spectd">{{ serreselt1[5] }}</td>
+                                    </tr>
+                                </table>
+                            {% endif %}
 
-{#            <div class="row">#}
-{#                <div class="column">#}
-{#                    #}
-{#                </div>#}
-{##}
-{#                <div class="column">#}
-{#                    #}
-{#                </div>#}
-{#            </div>#}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card text-white bg-info">
+                        <h3 class="card-header font-weight-bold">{{ Name2 }}</h3>
+                        <div class="card-body">
+
+                            {% if serreselt2 == [] %}
+                                <h5 class="card-title">Sorry, No Data Found. 😥</h5>
+                            {% else %}
+                                <img src="{{ serreselt2[6] }}"><hr>
+                                <table class="spectable">
+                                    <tr class="spectr">
+                                        <td class="spectd">Ram</td>
+                                        <td class="spectd">{{ serreselt2[0] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Processor</td>
+                                        <td class="spectd">{{ serreselt2[1] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Rear Camera</td>
+                                        <td class="spectd">{{ serreselt2[2] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Front Camera</td>
+                                        <td class="spectd">{{ serreselt2[3] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Display</td>
+                                        <td class="spectd">{{ serreselt2[4] }}</td>
+                                    </tr>
+                                    <tr class="spectr">
+                                        <td class="spectd">Battery</td>
+                                        <td class="spectd">{{ serreselt2[5] }}</td>
+                                    </tr>
+                                </table>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </main>
     </div>
