@@ -129,12 +129,21 @@ def UpdatePassword():
         NewPaswd = request.form['NewPasswordInputPassword']
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("UPDATE users SET Paswd='" + NewPaswd + "' WHERE Email ='" + Email + "' OR Phone ='" + Phone + "'")
-        mysql.connection.commit()
 
-        ErMessage = "Your Password has successfully Changed. Now you can go Back and Login"
+        cur.execute("SELECT Email FROM users WHERE Email ='" + Email + "'")
+        Email_Exist = cur.fetchone()
 
-        return render_template('NewPassword.html', ErMessage = ErMessage)
+        cur.execute("SELECT Phone FROM users WHERE Phone ='" + Phone + "'")
+        Phone_Exist = cur.fetchone()
+
+        if (Email_Exist or Phone_Exist) == None:
+            ErMessage = 'Invalid User!!'
+            return render_template('NewPassword.html', ErMessage = ErMessage)
+        else:
+            cur.execute("UPDATE users SET Paswd='" + NewPaswd + "' WHERE Email ='" + Email + "' OR Phone ='" + Phone + "'")
+            mysql.connection.commit()
+            SuMessage = "Your Password has been successfully Updated. Now you can go Back and Login"
+            return render_template('NewPassword.html', SuMessage = SuMessage)
 
     return render_template('NewPassword.html')
 
